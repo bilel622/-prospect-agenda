@@ -1,4 +1,4 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -7,751 +7,780 @@ DOCTYPE html>
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#f5f5f7;
-  color:#111;
+  background:#f4f6f8;
+  color:#111827;
 }
+
 header{
-  background:#111;
+  background:linear-gradient(135deg,#111827,#2563eb);
   color:white;
+  padding:25px 20px 30px;
+  border-radius:0 0 28px 28px;
+}
+
+header h1{
+  margin:0;
+  font-size:28px;
+}
+
+header p{
+  margin:6px 0 0;
+  opacity:.8;
+}
+
+main{
   padding:18px;
-  text-align:center;
-  font-size:22px;
-  font-weight:700;
+  padding-bottom:100px;
 }
-nav{
-  display:flex;
-  background:white;
-  border-bottom:1px solid #ddd;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-nav button{
-  flex:1;
-  border:0;
-  background:white;
-  padding:14px 5px;
-  font-size:14px;
-}
-nav button.active{
-  font-weight:700;
-  border-bottom:3px solid #111;
-}
-main{padding:15px;max-width:700px;margin:auto}
-.section{display:none}
-.section.active{display:block}
+
 .card{
   background:white;
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:12px;
-  box-shadow:0 2px 8px #00000012;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
+
+h2{
+  margin-top:0;
+  font-size:20px;
+}
+
+label{
+  display:block;
+  font-weight:600;
+  font-size:14px;
+  margin:14px 0 7px;
+}
+
 input,select,textarea{
   width:100%;
   padding:13px;
-  margin:6px 0 12px;
-  border:1px solid #ccc;
-  border-radius:10px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  background:#f9fafb;
   font-size:16px;
-  background:white;
 }
-textarea{min-height:100px;resize:vertical}
-label{
-  font-weight:600;
-  display:block;
-  margin-top:8px;
+
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
-button.action{
-  width:100%;
-  padding:14px;
+
+button{
   border:0;
-  border-radius:11px;
-  background:#111;
-  color:white;
+  border-radius:13px;
+  padding:13px 16px;
   font-size:16px;
-  font-weight:600;
-  margin-top:8px;
+  font-weight:700;
+  cursor:pointer;
 }
-button.secondary{
-  background:#eee;
-  color:#111;
+
+.primary{
+  width:100%;
+  background:#2563eb;
+  color:white;
+  margin-top:18px;
 }
-button.danger{
-  background:#d93025;
+
+.secondary{
+  background:#e5e7eb;
+  color:#111827;
 }
+
+.green{
+  background:#16a34a;
+  color:white;
+}
+
+.danger{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.prospect{
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.prospect strong{
+  font-size:18px;
+}
+
 .small{
-  color:#666;
-  font-size:13px;
+  color:#6b7280;
+  font-size:14px;
+  margin-top:5px;
 }
-.row{
+
+.actions{
   display:flex;
   gap:8px;
+  margin-top:12px;
 }
-.row button{flex:1}
-h2{margin-top:5px}
+
+.actions button{
+  flex:1;
+  font-size:13px;
+  padding:11px 7px;
+}
+
+.badge{
+  display:inline-block;
+  background:#dbeafe;
+  color:#1d4ed8;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  border-top:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+  z-index:100;
+}
+
+nav button{
+  background:none;
+  color:#6b7280;
+  font-size:12px;
+  padding:7px;
+}
+
+nav button.active{
+  color:#2563eb;
+}
+
+.hidden{
+  display:none;
+}
+
+.search{
+  margin-bottom:15px;
+}
+
+.info{
+  background:#eff6ff;
+  color:#1e40af;
+  padding:12px;
+  border-radius:12px;
+  font-size:14px;
+  margin-bottom:15px;
+}
 </style>
 </head>
 
 <body>
 
-<header>Prospect Agenda</header>
-
-<nav>
-  <button class="tab active" onclick="showTab('prospects',this)">Prospects</button>
-  <button class="tab" onclick="showTab('agenda',this)">Agenda</button>
-  <button class="tab" onclick="showTab('new',this)">Nouveau</button>
-</nav>
+<header>
+  <h1>Prospect Agenda</h1>
+  <p>Prospection & rendez-vous</p>
+</header>
 
 <main>
 
-<!-- PROSPECTS -->
-<section id="prospects" class="section active">
-  <h2>Mes prospects</h2>
+<section id="prospectsPage">
 
-  <input
-    id="search"
-    type="search"
-    placeholder="Rechercher nom, téléphone ou adresse..."
-    oninput="renderProspects()"
-  >
+  <div class="card">
+    <h2>Mes prospects</h2>
+    <input class="search" id="search" placeholder="🔎 Rechercher un prospect..." oninput="displayProspects()">
+    <div id="prospectsList"></div>
+  </div>
 
-  <div id="prospectList"></div>
 </section>
 
+<section id="agendaPage" class="hidden">
 
-<!-- AGENDA -->
-<section id="agenda" class="section">
-  <h2>Mes rendez-vous</h2>
-  <div id="agendaList"></div>
+  <div class="card">
+    <h2>📅 Mon agenda</h2>
+    <div id="appointmentsList"></div>
+  </div>
+
 </section>
 
+<section id="newPage" class="hidden">
 
-<!-- NOUVEAU -->
-<section id="new" class="section">
+  <div class="card">
 
-<h2>Nouveau prospect</h2>
+    <h2>➕ Nouveau prospect</h2>
 
-<div class="card">
+    <div class="info">
+      👤 Rendez-vous pris par <strong>Romaric</strong><br>
+      📅 La date de prise de rendez-vous est automatique.
+    </div>
 
-<label>Prénom</label>
-<input id="prenom" type="text">
+    <input type="hidden" id="datePrise">
 
-<label>Nom</label>
-<input id="nom" type="text">
+    <label>Date de prise du rendez-vous</label>
+    <input id="datePriseAffichage" disabled>
 
-<label>Téléphone</label>
-<input id="telephone" type="tel">
+    <div class="grid">
 
-<label>Adresse</label>
-<input id="adresse" type="text">
+      <div>
+        <label>Prénom</label>
+        <input id="firstName" placeholder="Prénom">
+      </div>
 
-<label>Comment chauffez-vous votre logement ?</label>
-<input id="chauffage" type="text">
+      <div>
+        <label>Nom</label>
+        <input id="lastName" placeholder="Nom">
+      </div>
 
-<label>Montant mensuel de la facture de gaz</label>
-<input id="gaz" type="text">
+    </div>
 
-<label>Type de production d'eau chaude</label>
-<input id="eauChaude" type="text">
+    <label>Téléphone</label>
+    <input id="phone" type="tel" placeholder="06...">
 
-<label>Surface du logement</label>
-<input id="surface" type="text">
+    <label>Adresse</label>
+    <input id="address" placeholder="Adresse complète">
 
-<label>Nombre d'occupants</label>
-<input id="occupants" type="number">
+    <label>Comment chauffez-vous votre logement ?</label>
+    <input id="heating" placeholder="Gaz, fioul, électrique, bois...">
 
-<label>Montant mensuel de la facture d'électricité</label>
-<input id="electricite" type="text">
+    <div class="grid">
 
-<label>Âge / état de l'équipement actuel</label>
-<input id="ageEquipement" type="text">
+      <div>
+        <label>Facture gaz mensuelle</label>
+        <input id="gasBill" placeholder="Ex : 120 €">
+      </div>
 
-<label>Projet envisagé</label>
-<textarea id="projet" placeholder="Décrire le projet du client..."></textarea>
+      <div>
+        <label>Facture électrique mensuelle</label>
+        <input id="electricBill" placeholder="Ex : 90 €">
+      </div>
 
-<label>Autres détails</label>
-<textarea id="details" placeholder="Informations complémentaires..."></textarea>
+    </div>
 
-<div class="card">
-  <strong>Rendez-vous pris par</strong>
-  <p>Romaric</p>
+    <label>Type de production d’eau chaude</label>
+    <input id="hotWater" placeholder="Ballon, chaudière...">
 
-  <strong>Date de prise du rendez-vous</strong>
-  <p id="datePrise"></p>
-</div>
+    <div class="grid">
 
-<label>Date du rendez-vous</label>
-<input id="rdvDate" type="date">
+      <div>
+        <label>Surface du logement</label>
+        <input id="surface" type="number" placeholder="Ex : 100">
+      </div>
 
-<label>Heure du rendez-vous</label>
-<input id="rdvHeure" type="time">
+      <div>
+        <label>Nombre d’occupants</label>
+        <input id="occupants" type="number" placeholder="Ex : 4">
+      </div>
 
-<label>Durée du rendez-vous</label>
-<select id="duree">
-  <option value="30">30 minutes</option>
-  <option value="45">45 minutes</option>
-  <option value="60" selected>1 heure</option>
-  <option value="90">1 h 30</option>
-  <option value="120">2 heures</option>
-</select>
+    </div>
 
-<button class="action" onclick="saveProspect()">
-  Enregistrer le prospect
-</button>
+    <label>Âge / état de l’équipement actuel</label>
+    <input id="equipment" placeholder="Ex : chaudière 15 ans">
 
-</div>
+    <label>Projet envisagé</label>
+    <input id="projet" placeholder="Pompe à chaleur, poêle, panneaux...">
+
+    <label>Autres détails</label>
+    <textarea id="details" placeholder="Informations complémentaires..."></textarea>
+
+    <h2 style="margin-top:25px">📅 Rendez-vous</h2>
+
+    <label>Date du rendez-vous</label>
+    <input id="rdvDate" type="date">
+
+    <label>Heure</label>
+    <input id="rdvHeure" type="time" value="09:00">
+
+    <label>Durée</label>
+    <select id="duree">
+      <option value="30">30 minutes</option>
+      <option value="45">45 minutes</option>
+      <option value="60" selected>1 heure</option>
+      <option value="90">1h30</option>
+      <option value="120">2 heures</option>
+    </select>
+
+    <button class="primary" onclick="saveProspect()">
+      💾 Enregistrer le prospect
+    </button>
+
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="clearForm()">
+      Effacer
+    </button>
+
+  </div>
+
 </section>
 
 </main>
 
+<nav>
+  <button id="navProspects" class="active" onclick="showPage('prospects')">
+    👥<br>Prospects
+  </button>
+
+  <button id="navAgenda" onclick="showPage('agenda')">
+    📅<br>Agenda
+  </button>
+
+  <button id="navNew" onclick="showPage('new')">
+    ➕<br>Nouveau
+  </button>
+</nav>
+
 <script>
 
-const STORAGE_PROSPECTS = "prospect_agenda_prospects";
-const STORAGE_APPOINTMENTS = "prospect_agenda_appointments";
+const PROSPECTS_KEY="prospects";
+const APPOINTMENTS_KEY="appointments";
 
-let prospects = JSON.parse(
-  localStorage.getItem(STORAGE_PROSPECTS) || "[]"
-);
-
-let appointments = JSON.parse(
-  localStorage.getItem(STORAGE_APPOINTMENTS) || "[]"
-);
-
-
-// -------------------------
-// NAVIGATION
-// -------------------------
-
-function showTab(tab, button){
-
-  document.querySelectorAll(".section")
-    .forEach(x => x.classList.remove("active"));
-
-  document.getElementById(tab)
-    .classList.add("active");
-
-  document.querySelectorAll(".tab")
-    .forEach(x => x.classList.remove("active"));
-
-  button.classList.add("active");
-
-  if(tab === "prospects") renderProspects();
-  if(tab === "agenda") renderAgenda();
-  if(tab === "new") updateDatePrise();
+function getProspects(){
+  return JSON.parse(localStorage.getItem(PROSPECTS_KEY)||"[]");
 }
 
+function getAppointments(){
+  return JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)||"[]");
+}
 
-// -------------------------
-// DATE AUTOMATIQUE
-// -------------------------
+function saveData(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
 
-function updateDatePrise(){
+function getToday(){
+  const d=new Date();
+  return d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,"0")+"-"+
+    String(d.getDate()).padStart(2,"0");
+}
 
-  const now = new Date();
+function formatDateFR(date){
+  if(!date)return"";
+  const parts=date.split("-");
+  return parts[2]+"/"+parts[1]+"/"+parts[0];
+}
 
-  document.getElementById("datePrise").textContent =
-    now.toLocaleDateString("fr-FR");
+function initialiseDates(){
+
+  const today=getToday();
+
+  document.getElementById("datePrise").value=today;
+
+  document.getElementById("datePriseAffichage").value=
+    formatDateFR(today);
+
+  if(!document.getElementById("rdvDate").value){
+    document.getElementById("rdvDate").value=today;
+  }
 
 }
 
+function showPage(page){
 
-// -------------------------
-// ENREGISTREMENT
-// -------------------------
+  document.getElementById("prospectsPage").classList.add("hidden");
+  document.getElementById("agendaPage").classList.add("hidden");
+  document.getElementById("newPage").classList.add("hidden");
+
+  document.getElementById("navProspects").classList.remove("active");
+  document.getElementById("navAgenda").classList.remove("active");
+  document.getElementById("navNew").classList.remove("active");
+
+  if(page==="prospects"){
+    document.getElementById("prospectsPage").classList.remove("hidden");
+    document.getElementById("navProspects").classList.add("active");
+    displayProspects();
+  }
+
+  if(page==="agenda"){
+    document.getElementById("agendaPage").classList.remove("hidden");
+    document.getElementById("navAgenda").classList.add("active");
+    displayAppointments();
+  }
+
+  if(page==="new"){
+    document.getElementById("newPage").classList.remove("hidden");
+    document.getElementById("navNew").classList.add("active");
+    initialiseDates();
+  }
+
+}
 
 function saveProspect(){
 
-  const prenom = document.getElementById("prenom").value.trim();
-  const nom = document.getElementById("nom").value.trim();
+  const firstName=document.getElementById("firstName").value.trim();
+  const lastName=document.getElementById("lastName").value.trim();
 
-  if(!prenom && !nom){
-    alert("Veuillez renseigner le prénom ou le nom.");
+  if(!firstName && !lastName){
+    alert("Veuillez renseigner au minimum le prénom ou le nom.");
     return;
   }
 
-  const now = new Date();
-
-  const prospect = {
-
-    id: Date.now(),
-
-    prenom,
-    nom,
-
-    telephone:
-      document.getElementById("telephone").value.trim(),
-
-    adresse:
-      document.getElementById("adresse").value.trim(),
-
-    chauffage:
-      document.getElementById("chauffage").value.trim(),
-
-    gaz:
-      document.getElementById("gaz").value.trim(),
-
-    eauChaude:
-      document.getElementById("eauChaude").value.trim(),
-
-    surface:
-      document.getElementById("surface").value.trim(),
-
-    occupants:
-      document.getElementById("occupants").value.trim(),
-
-    electricite:
-      document.getElementById("electricite").value.trim(),
-
-    ageEquipement:
-      document.getElementById("ageEquipement").value.trim(),
-
-    projet:
-      document.getElementById("projet").value.trim(),
-
-    details:
-      document.getElementById("details").value.trim(),
-
-    prisPar: "Romaric",
-
-    datePrise:
-      now.toLocaleDateString("fr-FR"),
-
-    rdvDate:
-      document.getElementById("rdvDate").value,
-
-    rdvHeure:
-      document.getElementById("rdvHeure").value,
-
-    duree:
-      document.getElementById("duree").value
-
+  const prospect={
+    id:Date.now(),
+    firstName:firstName,
+    lastName:lastName,
+    phone:document.getElementById("phone").value.trim(),
+    address:document.getElementById("address").value.trim(),
+    heating:document.getElementById("heating").value.trim(),
+    gasBill:document.getElementById("gasBill").value.trim(),
+    hotWater:document.getElementById("hotWater").value.trim(),
+    surface:document.getElementById("surface").value.trim(),
+    occupants:document.getElementById("occupants").value.trim(),
+    electricBill:document.getElementById("electricBill").value.trim(),
+    equipment:document.getElementById("equipment").value.trim(),
+    projet:document.getElementById("projet").value.trim(),
+    details:document.getElementById("details").value.trim(),
+    prisPar:"Romaric",
+    datePrise:document.getElementById("datePrise").value
   };
 
+  const prospects=getProspects();
   prospects.push(prospect);
+  saveData(PROSPECTS_KEY,prospects);
 
-  localStorage.setItem(
-    STORAGE_PROSPECTS,
-    JSON.stringify(prospects)
-  );
+  const rdvDate=document.getElementById("rdvDate").value;
+  const rdvHeure=document.getElementById("rdvHeure").value;
+  const duree=document.getElementById("duree").value;
 
+  if(rdvDate && rdvHeure){
 
-  // Création de l'enregistrement agenda local
-  if(prospect.rdvDate && prospect.rdvHeure){
+    const appointment={
+      id:Date.now(),
+      prospectId:prospect.id,
+      date:rdvDate,
+      time:rdvHeure,
+      duration:duree,
+      firstName:firstName,
+      lastName:lastName,
+      address:prospect.address,
+      phone:prospect.phone
+    };
 
-    appointments.push({
-      id: prospect.id,
-      prospectId: prospect.id,
-      nom: `${prenom} ${nom}`.trim(),
-      adresse: prospect.adresse,
-      date: prospect.rdvDate,
-      heure: prospect.rdvHeure,
-      duree: prospect.duree,
-      telephone: prospect.telephone
-    });
+    const appointments=getAppointments();
+    appointments.push(appointment);
+    saveData(APPOINTMENTS_KEY,appointments);
 
-    localStorage.setItem(
-      STORAGE_APPOINTMENTS,
-      JSON.stringify(appointments)
-    );
+    ouvrirGoogleAgenda(prospect,appointment);
 
-    ouvrirGoogleAgenda(prospect);
-
+  }else{
+    alert("Prospect enregistré !");
   }
 
+  clearForm();
+  displayProspects();
 
-  alert("Prospect enregistré.");
-
-  document.querySelectorAll("#new input, #new textarea")
-    .forEach(x => x.value = "");
-
-  document.getElementById("duree").value = "60";
-
-  updateDatePrise();
-  renderProspects();
-
-  showTab(
-    "prospects",
-    document.querySelectorAll(".tab")[0]
-  );
 }
 
+function ouvrirGoogleAgenda(prospect,appointment){
 
-// -------------------------
-// GOOGLE AGENDA
-// -------------------------
+  const start=convertirDateGoogle(
+    appointment.date,
+    appointment.time
+  );
 
-function ouvrirGoogleAgenda(p){
+  const end=calculerFin(
+    appointment.date,
+    appointment.time,
+    Number(appointment.duration)
+  );
 
-  if(!p.rdvDate || !p.rdvHeure) return;
+  const title=
+    "RDV - "+
+    prospect.firstName+" "+
+    prospect.lastName;
 
-  const debut =
-    new Date(`${p.rdvDate}T${p.rdvHeure}`);
+  const description=
+`Rendez-vous pris par : ${prospect.prisPar}
+Date de prise : ${formatDateFR(prospect.datePrise)}
 
-  const fin =
-    new Date(
-      debut.getTime() +
-      Number(p.duree) * 60000
-    );
+Téléphone : ${prospect.phone}
+Adresse : ${prospect.address}
 
-  function formatGoogleDate(d){
+Chauffage : ${prospect.heating}
+Facture gaz mensuelle : ${prospect.gasBill}
+Production eau chaude : ${prospect.hotWater}
+Surface : ${prospect.surface} m²
+Nombre d'occupants : ${prospect.occupants}
+Facture électrique : ${prospect.electricBill}
+Âge / état équipement : ${prospect.equipment}
 
-    return d.toISOString()
-      .replace(/[-:]/g,"")
-      .replace(/\.\d{3}/,"");
-
-  }
-
-  const titre =
-    `Rendez-vous ${p.prenom} ${p.nom}`.trim();
-
-  const description =
-`Prospect pris par : ${p.prisPar}
-
-Téléphone : ${p.telephone}
-
-Chauffage : ${p.chauffage}
-
-Gaz : ${p.gaz}
-
-Eau chaude : ${p.eauChaude}
-
-Surface : ${p.surface}
-
-Occupants : ${p.occupants}
-
-Électricité : ${p.electricite}
-
-Âge équipement : ${p.ageEquipement}
-
-Projet envisagé :
-${p.projet}
+Projet envisagé : ${prospect.projet}
 
 Autres détails :
-${p.details}`;
+${prospect.details}`;
 
-  const url =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-    "&text=" + encodeURIComponent(titre) +
-    "&dates=" + formatGoogleDate(debut) +
-    "/" + formatGoogleDate(fin) +
-    "&details=" + encodeURIComponent(description) +
-    "&location=" + encodeURIComponent(p.adresse);
+  const url=
+    "https://calendar.google.com/calendar/render?action=TEMPLATE"+
+    "&text="+encodeURIComponent(title)+
+    "&dates="+start+"/"+end+
+    "&details="+encodeURIComponent(description)+
+    "&location="+encodeURIComponent(prospect.address);
 
   window.open(url,"_blank");
 
 }
 
+function convertirDateGoogle(date,time){
 
-// -------------------------
-// AFFICHAGE PROSPECTS
-// -------------------------
+  return date.replaceAll("-","")+
+    "T"+
+    time.replace(":","")+"00";
 
-function renderProspects(){
+}
 
-  const container =
-    document.getElementById("prospectList");
+function calculerFin(date,time,duration){
 
-  const search =
-    document.getElementById("search").value
-      .toLowerCase();
+  const d=new Date(date+"T"+time+":00");
 
-  const filtered =
-    prospects.filter(p => {
+  d.setMinutes(d.getMinutes()+duration);
 
-      const text =
-        `${p.prenom} ${p.nom} ${p.telephone} ${p.adresse}`
-        .toLowerCase();
+  const year=d.getFullYear();
+  const month=String(d.getMonth()+1).padStart(2,"0");
+  const day=String(d.getDate()).padStart(2,"0");
+  const hours=String(d.getHours()).padStart(2,"0");
+  const minutes=String(d.getMinutes()).padStart(2,"0");
 
-      return text.includes(search);
+  return year+month+day+"T"+hours+minutes+"00";
 
-    });
+}
 
+function displayProspects(){
 
-  if(filtered.length === 0){
+  const list=document.getElementById("prospectsList");
 
-    container.innerHTML =
-      `<div class="card">Aucun prospect.</div>`;
+  const search=
+    (document.getElementById("search")?.value||"")
+    .toLowerCase();
+
+  const prospects=getProspects().filter(p=>
+    (p.firstName+" "+p.lastName+" "+
+     p.phone+" "+p.address+" "+p.projet)
+    .toLowerCase()
+    .includes(search)
+  );
+
+  if(prospects.length===0){
+
+    list.innerHTML=
+      `<div class="small">
+        Aucun prospect pour le moment.
+      </div>`;
 
     return;
-
   }
 
+  list.innerHTML=prospects.map(p=>`
 
-  container.innerHTML =
-    filtered.map(p => `
+    <div class="prospect">
 
-      <div class="card">
+      <strong>
+        ${escapeHTML(p.firstName)} ${escapeHTML(p.lastName)}
+      </strong>
 
-        <h3>
-          ${escapeHtml(
-            `${p.prenom} ${p.nom}`.trim()
-          )}
-        </h3>
+      <div class="badge">
+        Pris par ${escapeHTML(p.prisPar||"Romaric")}
+      </div>
 
-        <p>
-          📞 ${escapeHtml(p.telephone || "-")}
-        </p>
+      <div class="small">
+        📞 ${escapeHTML(p.phone||"Non renseigné")}
+      </div>
 
-        <p>
-          📍 ${escapeHtml(p.adresse || "-")}
-        </p>
+      <div class="small">
+        📍 ${escapeHTML(p.address||"Non renseignée")}
+      </div>
 
-        <p>
-          👤 Rendez-vous pris par :
-          <strong>${escapeHtml(p.prisPar)}</strong>
-        </p>
+      <div class="small">
+        🔥 ${escapeHTML(p.heating||"Non renseigné")}
+      </div>
 
-        <p>
-          📅 Pris le :
-          ${escapeHtml(p.datePrise)}
-        </p>
+      <div class="small">
+        🏠 ${escapeHTML(p.projet||"Projet non renseigné")}
+      </div>
 
-        ${
-          p.projet
-          ? `<p><strong>Projet :</strong>
-             ${escapeHtml(p.projet)}</p>`
-          : ""
-        }
+      <div class="actions">
 
-        ${
-          p.details
-          ? `<p><strong>Détails :</strong>
-             ${escapeHtml(p.details)}</p>`
-          : ""
-        }
+        <button class="green"
+          onclick="callClient('${p.phone||""}')">
+          📞 Appeler
+        </button>
 
-        <div class="row">
+        <button class="secondary"
+          onclick="openMaps('${p.address||""}')">
+          📍 Itinéraire
+        </button>
 
-          <button class="action"
-            onclick="appeler('${encodeURIComponent(p.telephone)}')">
-            Appeler
-          </button>
-
-          <button class="action"
-            onclick="itineraire('${encodeURIComponent(p.adresse)}')">
-            Itinéraire
-          </button>
-
-        </div>
-
-        ${
-          p.rdvDate
-          ?
-          `<button class="action secondary"
-             onclick="ouvrirGoogleAgendaDepuisProspect(${p.id})">
-             Google Agenda
-           </button>`
-          :
-          ""
-        }
-
-        <button class="action danger"
-          onclick="deleteProspect(${p.id})">
-          Supprimer
+        <button class="primary"
+          style="margin:0"
+          onclick="nouveauRdv(${p.id})">
+          📅 RDV
         </button>
 
       </div>
 
-    `).join("");
+    </div>
+
+  `).join("");
 
 }
 
+function displayAppointments(){
 
-// -------------------------
-// AGENDA
-// -------------------------
+  const list=document.getElementById("appointmentsList");
+  const appointments=getAppointments();
 
-function renderAgenda(){
+  if(appointments.length===0){
 
-  const container =
-    document.getElementById("agendaList");
+    list.innerHTML=
+      `<div class="small">
+        Aucun rendez-vous enregistré.
+      </div>`;
 
-  const sorted =
-    [...appointments].sort((a,b) =>
-      (`${a.date} ${a.heure}`)
-      .localeCompare(`${b.date} ${b.heure}`)
+    return;
+  }
+
+  appointments.sort((a,b)=>
+    (a.date+a.time).localeCompare(b.date+b.time)
+  );
+
+  list.innerHTML=appointments.map(a=>`
+
+    <div class="prospect">
+
+      <strong>
+        📅 ${escapeHTML(a.firstName)}
+        ${escapeHTML(a.lastName)}
+      </strong>
+
+      <div class="badge">
+        ${formatDateFR(a.date)} à ${a.time}
+      </div>
+
+      <div class="small">
+        ⏱ ${a.duration} minutes
+      </div>
+
+      <div class="small">
+        📞 ${escapeHTML(a.phone||"")}
+      </div>
+
+      <div class="small">
+        📍 ${escapeHTML(a.address||"")}
+      </div>
+
+      <div class="actions">
+
+        <button class="green"
+          onclick="callClient('${a.phone||""}')">
+          📞 Appeler
+        </button>
+
+        <button class="secondary"
+          onclick="openMaps('${a.address||""}')">
+          📍 Itinéraire
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+function nouveauRdv(id){
+
+  const prospect=
+    getProspects().find(p=>p.id===id);
+
+  if(!prospect)return;
+
+  showPage("new");
+
+  document.getElementById("firstName").value=prospect.firstName||"";
+  document.getElementById("lastName").value=prospect.lastName||"";
+  document.getElementById("phone").value=prospect.phone||"";
+  document.getElementById("address").value=prospect.address||"";
+  document.getElementById("heating").value=prospect.heating||"";
+  document.getElementById("gasBill").value=prospect.gasBill||"";
+  document.getElementById("hotWater").value=prospect.hotWater||"";
+  document.getElementById("surface").value=prospect.surface||"";
+  document.getElementById("occupants").value=prospect.occupants||"";
+  document.getElementById("electricBill").value=prospect.electricBill||"";
+  document.getElementById("equipment").value=prospect.equipment||"";
+  document.getElementById("projet").value=prospect.projet||"";
+  document.getElementById("details").value=prospect.details||"";
+
+  initialiseDates();
+
+}
+
+function callClient(phone){
+
+  if(phone){
+    window.location.href="tel:"+phone;
+  }
+
+}
+
+function openMaps(address){
+
+  if(address){
+    window.open(
+      "https://www.google.com/maps/search/?api=1&query="+
+      encodeURIComponent(address),
+      "_blank"
     );
-
-
-  if(sorted.length === 0){
-
-    container.innerHTML =
-      `<div class="card">Aucun rendez-vous.</div>`;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    sorted.map(a => `
-
-      <div class="card">
-
-        <h3>${escapeHtml(a.nom)}</h3>
-
-        <p>
-          📅 ${formatDate(a.date)}
-          à ${escapeHtml(a.heure)}
-        </p>
-
-        <p>
-          📍 ${escapeHtml(a.adresse || "-")}
-        </p>
-
-        <button class="action"
-          onclick="ouvrirGoogleAgendaDepuisAppointment(${a.id})">
-          Ouvrir dans Google Agenda
-        </button>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-// -------------------------
-// ACTIONS
-// -------------------------
-
-function appeler(phone){
-
-  if(!phone){
-    alert("Aucun numéro de téléphone.");
-    return;
-  }
-
-  window.location.href =
-    "tel:" + decodeURIComponent(phone);
-
-}
-
-
-function itineraire(address){
-
-  if(!address){
-    alert("Aucune adresse.");
-    return;
-  }
-
-  window.open(
-    "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(address),
-    "_blank"
-  );
-
-}
-
-
-function ouvrirGoogleAgendaDepuisProspect(id){
-
-  const p =
-    prospects.find(x => x.id === id);
-
-  if(p) ouvrirGoogleAgenda(p);
-
-}
-
-
-function ouvrirGoogleAgendaDepuisAppointment(id){
-
-  const a =
-    appointments.find(x => x.id === id);
-
-  if(!a) return;
-
-  const p =
-    prospects.find(x => x.id === a.prospectId);
-
-  if(p){
-
-    ouvrirGoogleAgenda(p);
-
-  }else{
-
-    const temp = {
-      prenom: a.nom,
-      nom: "",
-      adresse: a.adresse,
-      telephone: a.telephone,
-      rdvDate: a.date,
-      rdvHeure: a.heure,
-      duree: a.duree,
-      prisPar: "Romaric",
-      projet: "",
-      details: ""
-    };
-
-    ouvrirGoogleAgenda(temp);
-
   }
 
 }
 
+function clearForm(){
 
-function deleteProspect(id){
+  document.getElementById("firstName").value="";
+  document.getElementById("lastName").value="";
+  document.getElementById("phone").value="";
+  document.getElementById("address").value="";
+  document.getElementById("heating").value="";
+  document.getElementById("gasBill").value="";
+  document.getElementById("hotWater").value="";
+  document.getElementById("surface").value="";
+  document.getElementById("occupants").value="";
+  document.getElementById("electricBill").value="";
+  document.getElementById("equipment").value="";
+  document.getElementById("projet").value="";
+  document.getElementById("details").value="";
 
-  if(!confirm("Supprimer ce prospect ?")) return;
-
-  prospects =
-    prospects.filter(p => p.id !== id);
-
-  appointments =
-    appointments.filter(a => a.prospectId !== id);
-
-  localStorage.setItem(
-    STORAGE_PROSPECTS,
-    JSON.stringify(prospects)
-  );
-
-  localStorage.setItem(
-    STORAGE_APPOINTMENTS,
-    JSON.stringify(appointments)
-  );
-
-  renderProspects();
+  initialiseDates();
 
 }
 
+function escapeHTML(text){
 
-// -------------------------
-// UTILITAIRES
-// -------------------------
-
-function formatDate(date){
-
-  if(!date) return "-";
-
-  const parts = date.split("-");
-
-  if(parts.length !== 3) return date;
-
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return String(text||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
-
-function escapeHtml(value){
-
-  return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-// Initialisation
-
-updateDatePrise();
-renderProspects();
+initialiseDates();
+displayProspects();
 
 </script>
 
