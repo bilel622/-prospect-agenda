@@ -2,785 +2,998 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#071f19">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <title>Eco Green CRM</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link
+ rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<link
+ rel="stylesheet"
+ href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"
+/>
 
 <style>
+
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+ box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
-  background:#f4f7f6;
-  color:#14221e;
-}
-
-button,input,select,textarea{
-  font:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-.app{
-  min-height:100vh;
-  padding-bottom:82px;
+ margin:0;
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+ background:#f3f7f5;
+ color:#14231d;
+ padding-bottom:82px;
 }
 
 .header{
-  background:linear-gradient(145deg,#06261d,#0c6b47);
-  color:white;
-  padding:48px 20px 25px;
-  border-radius:0 0 28px 28px;
+ background:linear-gradient(135deg,#063b29,#087a50);
+ color:white;
+ padding:25px 18px 22px;
+ border-radius:0 0 28px 28px;
+ box-shadow:0 8px 25px rgba(0,70,45,.18);
 }
 
 .header-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
 }
 
-.logo-title{
-  font-size:25px;
-  font-weight:800;
+.header h1{
+ margin:0;
+ font-size:25px;
 }
 
-.logo-sub{
-  opacity:.8;
-  font-size:13px;
-  margin-top:3px;
+.header p{
+ margin:5px 0 0;
+ opacity:.85;
+ font-size:13px;
 }
 
-.avatar{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  overflow:hidden;
-  background:white;
-  border:2px solid rgba(255,255,255,.6);
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.header-logo{
+ width:52px;
+ height:52px;
+ border-radius:14px;
+ object-fit:cover;
+ background:white;
 }
 
 .container{
-  padding:18px;
-  max-width:850px;
-  margin:auto;
+ max-width:720px;
+ margin:auto;
+ padding:18px 15px 110px;
 }
 
-.view{
-  display:none;
+.page{
+ display:none;
 }
 
-.view.active{
-  display:block;
+.page.active{
+ display:block;
 }
 
-.section-title{
-  font-size:23px;
-  font-weight:800;
-  margin:5px 0 5px;
+h2{
+ font-size:22px;
+ margin:5px 0 16px;
 }
 
-.section-subtitle{
-  color:#71807b;
-  margin-bottom:18px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-top:18px;
-}
-
-.stat{
-  background:white;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 5px 20px rgba(0,0,0,.05);
-}
-
-.stat-number{
-  font-size:27px;
-  font-weight:800;
-  color:#08734c;
-}
-
-.stat-label{
-  color:#71807b;
-  font-size:13px;
-  margin-top:4px;
+h3{
+ margin:0 0 10px;
 }
 
 .card{
-  background:white;
-  border-radius:20px;
-  padding:18px;
-  margin-bottom:14px;
-  box-shadow:0 5px 20px rgba(0,0,0,.05);
+ background:white;
+ border-radius:21px;
+ padding:18px;
+ margin-bottom:15px;
+ box-shadow:0 6px 22px rgba(0,50,30,.07);
 }
 
-.card-title{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:5px;
+.stats{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
 }
 
-.card-sub{
-  color:#71807b;
-  font-size:14px;
+.stat{
+ background:white;
+ border-radius:20px;
+ padding:18px;
+ box-shadow:0 6px 22px rgba(0,50,30,.07);
 }
 
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:14px;
+.stat strong{
+ display:block;
+ font-size:27px;
+ color:#087a50;
 }
 
-.btn{
-  border-radius:13px;
-  padding:12px 15px;
-  font-weight:700;
-  background:#eaf3ef;
-  color:#075d40;
-}
-
-.btn-primary{
-  background:#08734c;
-  color:white;
-}
-
-.btn-danger{
-  background:#ffe9e9;
-  color:#bd2424;
-}
-
-.btn-dark{
-  background:#10231d;
-  color:white;
-}
-
-.btn-small{
-  padding:9px 12px;
-  font-size:13px;
-}
-
-.form-group{
-  margin-bottom:14px;
+.stat span{
+ font-size:13px;
+ color:#6c7a73;
 }
 
 label{
-  display:block;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:7px;
-  color:#53645e;
+ display:block;
+ font-size:13px;
+ font-weight:700;
+ color:#43534c;
+ margin:14px 0 6px;
 }
 
-input,select,textarea{
-  width:100%;
-  border:1px solid #dfe7e3;
-  background:#f8faf9;
-  border-radius:14px;
-  padding:14px;
-  outline:none;
-  color:#14221e;
-}
-
-input:focus,select:focus,textarea:focus{
-  border-color:#08734c;
-  background:white;
+input,
+textarea,
+select{
+ width:100%;
+ border:1px solid #dce7e1;
+ background:#f8fbf9;
+ border-radius:14px;
+ padding:14px;
+ font-size:16px;
+ outline:none;
 }
 
 textarea{
-  min-height:100px;
-  resize:vertical;
+ min-height:95px;
+ resize:vertical;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+input:focus,
+textarea:focus,
+select:focus{
+ border-color:#087a50;
+ background:white;
+}
+
+.btn{
+ border:0;
+ border-radius:14px;
+ padding:14px 15px;
+ font-size:14px;
+ font-weight:750;
+ cursor:pointer;
+}
+
+.btn-primary{
+ background:#087a50;
+ color:white;
+}
+
+.btn-secondary{
+ background:#eaf4ef;
+ color:#087a50;
+}
+
+.btn-danger{
+ background:#fff0f0;
+ color:#c62828;
+}
+
+.btn-dark{
+ background:#17352b;
+ color:white;
+}
+
+.btn-red{
+ background:#ffe8e8;
+ color:#c62828;
 }
 
 .full{
-  grid-column:1/-1;
+ width:100%;
+ margin-top:10px;
 }
 
-.empty{
-  text-align:center;
-  color:#788781;
-  padding:35px 15px;
+.actions{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:8px;
+ margin-top:12px;
 }
 
-.search{
-  margin-bottom:15px;
+.prospect{
+ background:white;
+ border-radius:19px;
+ padding:16px;
+ margin-bottom:12px;
+ box-shadow:0 6px 20px rgba(0,50,30,.06);
 }
 
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:76px;
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(15px);
-  border-top:1px solid #e6ece9;
-  display:flex;
-  z-index:1000;
-  padding-bottom:env(safe-area-inset-bottom);
+.prospect-name{
+ font-size:18px;
+ font-weight:800;
 }
 
-.nav-btn{
-  flex:1;
-  background:none;
-  color:#7a8984;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  font-size:11px;
-  font-weight:700;
-}
-
-.nav-icon{
-  font-size:21px;
-}
-
-.nav-btn.active{
-  color:#08734c;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  z-index:3000;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:700px;
-  background:#fff;
-  border-radius:28px 28px 0 0;
-  padding:22px;
-  max-height:90vh;
-  overflow:auto;
-}
-
-.modal-title{
-  font-size:22px;
-  font-weight:800;
-  margin-bottom:18px;
-}
-
-.close{
-  float:right;
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:#edf2f0;
-}
-
-.map-wrap{
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 5px 20px rgba(0,0,0,.05);
-}
-
-#map{
-  height:58vh;
-  min-height:430px;
-}
-
-.map-toolbar{
-  padding:12px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.counter{
-  background:#eaf3ef;
-  color:#08734c;
-  border-radius:12px;
-  padding:10px 13px;
-  font-weight:800;
-  font-size:13px;
-}
-
-.card-image{
-  width:100%;
-  border-radius:18px;
-  display:block;
+.prospect-info{
+ color:#68776f;
+ font-size:13px;
+ margin-top:5px;
 }
 
 .badge{
-  display:inline-block;
-  padding:6px 9px;
-  border-radius:10px;
-  background:#eaf3ef;
-  color:#08734c;
-  font-size:12px;
-  font-weight:800;
+ display:inline-block;
+ margin-top:9px;
+ padding:6px 10px;
+ border-radius:20px;
+ background:#e9f7f0;
+ color:#087a50;
+ font-size:12px;
+ font-weight:700;
 }
 
-.success-box{
-  background:#eaf8f1;
-  color:#075d40;
-  padding:15px;
-  border-radius:15px;
-  margin-bottom:15px;
+.search{
+ margin-bottom:14px;
 }
 
-.appointment-highlight{
-  border-left:4px solid #08734c;
+.empty{
+ text-align:center;
+ color:#7b8882;
+ padding:30px 10px;
 }
 
-@media(max-width:600px){
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
+.separator{
+ height:1px;
+ background:#edf1ef;
+ margin:16px 0;
 }
+
+.small{
+ color:#78857f;
+ font-size:12px;
+}
+
+.back{
+ display:inline-block;
+ margin-bottom:12px;
+ color:#087a50;
+ font-weight:750;
+}
+
+.bottom-nav{
+ position:fixed;
+ left:0;
+ right:0;
+ bottom:0;
+ height:78px;
+ background:rgba(255,255,255,.96);
+ backdrop-filter:blur(18px);
+ border-top:1px solid #e1e9e5;
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ z-index:9999;
+}
+
+.nav-btn{
+ border:0;
+ background:none;
+ color:#7b8982;
+ font-size:10px;
+ font-weight:700;
+}
+
+.nav-btn span{
+ display:block;
+ font-size:22px;
+ margin-bottom:3px;
+}
+
+.nav-btn.active{
+ color:#087a50;
+}
+
+#map{
+ width:100%;
+ height:62vh;
+ min-height:430px;
+ border-radius:20px;
+ overflow:hidden;
+ box-shadow:0 6px 20px rgba(0,50,30,.12);
+}
+
+.map-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-bottom:10px;
+}
+
+.map-status{
+ background:white;
+ border-radius:16px;
+ padding:13px;
+ margin-bottom:10px;
+ font-size:13px;
+}
+
+.map-status strong{
+ color:#c62828;
+}
+
+.prospecting-card{
+ background:white;
+ border-radius:20px;
+ padding:12px;
+ margin-top:14px;
+ box-shadow:0 6px 20px rgba(0,50,30,.06);
+}
+
+.prospecting-card img{
+ width:100%;
+ border-radius:15px;
+ display:block;
+}
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.52);
+ display:none;
+ align-items:flex-end;
+ justify-content:center;
+ z-index:20000;
+}
+
+.modal.active{
+ display:flex;
+}
+
+.modal-box{
+ background:white;
+ width:100%;
+ max-width:720px;
+ max-height:90vh;
+ overflow:auto;
+ border-radius:25px 25px 0 0;
+ padding:20px;
+}
+
+.modal-title{
+ font-size:21px;
+ font-weight:800;
+ margin-bottom:5px;
+}
+
+.modal-subtitle{
+ color:#718078;
+ font-size:13px;
+ margin-bottom:15px;
+}
+
+.rdv-summary{
+ background:#f1f8f4;
+ border-radius:16px;
+ padding:14px;
+ margin-bottom:12px;
+}
+
+.rdv-summary strong{
+ color:#087a50;
+}
+
+.leaflet-control-attribution{
+ font-size:8px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
 <header class="header">
-  <div class="header-top">
-    <div>
-      <div class="logo-title">Eco Green CRM</div>
-      <div class="logo-sub">Éco Conseiller · Romaric</div>
-    </div>
 
-    <div class="avatar">
-      <img src="IMG_2501.jpeg" alt="Carte Eco Green">
-    </div>
+ <div class="header-top">
+
+  <div>
+   <h1>Eco Green CRM</h1>
+   <p>Prospection & rendez-vous</p>
   </div>
+
+  <img
+   src="IMG_2501.jpeg"
+   class="header-logo"
+   alt="Carte Eco Green"
+  >
+
+ </div>
+
 </header>
 
-<main>
 
-<!-- ACCUEIL -->
-<section id="view-home" class="view active">
 <div class="container">
 
-  <div class="section-title">Bonjour Romaric 👋</div>
-  <div class="section-subtitle">Votre espace de prospection</div>
+<!-- ACCUEIL -->
 
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-number" id="statProspects">0</div>
-      <div class="stat-label">Prospects</div>
-    </div>
+<section id="homePage" class="page active">
 
-    <div class="stat">
-      <div class="stat-number" id="statAppointments">0</div>
-      <div class="stat-label">Rendez-vous</div>
-    </div>
+ <h2>Tableau de bord</h2>
 
-    <div class="stat">
-      <div class="stat-number" id="statStreets">0</div>
-      <div class="stat-label">Rues prospectées</div>
-    </div>
+ <div class="stats">
 
-    <div class="stat">
-      <div class="stat-number">60 min</div>
-      <div class="stat-label">Durée des RDV</div>
-    </div>
+  <div class="stat">
+   <strong id="statProspects">0</strong>
+   <span>Prospects</span>
   </div>
 
-  <div class="card" style="margin-top:15px">
-    <div class="card-title">Votre carte professionnelle</div>
-    <div class="card-sub" style="margin-bottom:12px">
-      Votre carte Eco Green est disponible ici.
-    </div>
-    <img class="card-image" src="IMG_2501.jpeg" alt="Carte professionnelle Eco Green">
+  <div class="stat">
+   <strong id="statRdv">0</strong>
+   <span>Rendez-vous</span>
   </div>
 
-  <div class="card">
-    <div class="card-title">Actions rapides</div>
-
-    <div class="actions">
-      <button class="btn btn-primary" onclick="showView('new')">
-        ＋ Nouveau prospect
-      </button>
-
-      <button class="btn" onclick="showView('prospection')">
-        📍 Prospection
-      </button>
-
-      <button class="btn" onclick="showView('agenda')">
-        📅 Agenda
-      </button>
-    </div>
+  <div class="stat">
+   <strong id="statStreets">0</strong>
+   <span>Rues prospectées</span>
   </div>
 
-</div>
+  <div class="stat">
+   <strong id="statToday">0</strong>
+   <span>RDV aujourd'hui</span>
+  </div>
+
+ </div>
+
+
+ <div class="card" style="margin-top:15px">
+
+  <h3>Actions rapides</h3>
+
+  <button
+   class="btn btn-primary full"
+   onclick="prepareNew()"
+  >
+   ➕ Nouveau prospect
+  </button>
+
+  <button
+   class="btn btn-secondary full"
+   onclick="showPage('prospectsPage')"
+  >
+   👥 Mes prospects
+  </button>
+
+  <button
+   class="btn btn-secondary full"
+   onclick="showPage('agendaPage')"
+  >
+   📅 Mon agenda
+  </button>
+
+  <button
+   class="btn btn-secondary full"
+   onclick="showPage('prospectionPage')"
+  >
+   🗺️ Prospection
+  </button>
+
+ </div>
+
 </section>
 
 
 <!-- PROSPECTS -->
-<section id="view-prospects" class="view">
-<div class="container">
 
-  <div class="section-title">Prospects</div>
-  <div class="section-subtitle">Tous vos contacts</div>
+<section id="prospectsPage" class="page">
 
-  <input
-    id="searchProspects"
-    class="search"
-    type="search"
-    placeholder="Rechercher un nom, téléphone ou adresse..."
-    oninput="renderProspects()"
-  >
+ <h2>Mes prospects</h2>
 
-  <div id="prospectsList"></div>
+ <input
+  id="searchInput"
+  class="search"
+  type="search"
+  placeholder="🔎 Nom, téléphone ou adresse..."
+  oninput="displayProspects()"
+ >
 
-</div>
+ <div id="prospectsList"></div>
+
 </section>
 
 
-<!-- AGENDA -->
-<section id="view-agenda" class="view">
-<div class="container">
+<!-- DETAIL -->
 
-  <div class="section-title">Agenda</div>
-  <div class="section-subtitle">Vos rendez-vous</div>
+<section id="detailPage" class="page">
 
-  <div id="appointmentsList"></div>
+ <div
+  class="back"
+  onclick="showPage('prospectsPage')"
+ >
+  ‹ Retour aux prospects
+ </div>
 
-</div>
-</section>
+ <div id="detailContent"></div>
 
-
-<!-- PROSPECTION -->
-<section id="view-prospection" class="view">
-<div class="container">
-
-  <div class="section-title">Prospection</div>
-  <div class="section-subtitle">
-    Localisez-vous et marquez les rues déjà prospectées.
-  </div>
-
-  <div class="map-wrap">
-
-    <div class="map-toolbar">
-
-      <button class="btn btn-primary btn-small" onclick="locateMe()">
-        📍 Me localiser
-      </button>
-
-      <button class="btn btn-small" onclick="startStreetMode()">
-        🟥 Marquer une rue
-      </button>
-
-      <button class="btn btn-small" onclick="undoStreet()">
-        ↩️ Annuler dernière
-      </button>
-
-      <div class="counter">
-        <span id="streetCounter">0</span> rue(s)
-      </div>
-
-    </div>
-
-    <div id="map"></div>
-
-  </div>
-
-  <div class="card" style="margin-top:15px">
-    <div class="card-title">Comment ça marche ?</div>
-    <div class="card-sub">
-      Appuie sur « Marquer une rue », puis trace la rue avec ton doigt
-      sur la carte. Elle sera enregistrée en rouge.
-    </div>
-  </div>
-
-</div>
 </section>
 
 
 <!-- NOUVEAU PROSPECT -->
-<section id="view-new" class="view">
-<div class="container">
 
-  <div class="section-title" id="newTitle">Nouveau prospect</div>
-  <div class="section-subtitle">
-    Ajoutez les informations du prospect.
-  </div>
+<section id="newPage" class="page">
 
-  <div class="card">
+ <h2 id="formTitle">Nouveau prospect</h2>
 
-    <form id="prospectForm">
+ <form id="prospectForm">
 
-      <input type="hidden" id="editingId">
+  <input
+   type="hidden"
+   id="editId"
+  >
 
-      <div class="form-grid">
+  <label>Nom</label>
+  <input id="name" required>
 
-        <div class="form-group">
-          <label>Nom *</label>
-          <input id="name" required>
-        </div>
+  <label>Téléphone</label>
+  <input id="phone" type="tel" required>
 
-        <div class="form-group">
-          <label>Téléphone *</label>
-          <input id="phone" type="tel" required>
-        </div>
+  <label>Adresse</label>
+  <input id="address" required>
 
-        <div class="form-group full">
-          <label>Adresse *</label>
-          <input id="address" required>
-        </div>
+  <label>Type de chauffe </label>
+  <input id="heating">
 
-        <div class="form-group">
-          <label>Comment chauffez-vous votre logement ?</label>
-          <input id="heating">
-        </div>
+  <label>Facture gaz </label>
+  <input
+   id="gasBill"
+   placeholder="Ex : 120 €"
+  >
 
-        <div class="form-group">
-          <label>Facture gaz mensuelle (€)</label>
-          <input id="gasBill" type="number" min="0">
-        </div>
+  <label>Production eau chaude</label>
+  <input id="hotWater">
 
-        <div class="form-group">
-          <label>Type de production d’eau chaude</label>
-          <input id="hotWater">
-        </div>
+  <label>Surface du logement</label>
+  <input
+   id="surface"
+   placeholder="Ex : 100 m²"
+  >
 
-        <div class="form-group">
-          <label>Surface du logement (m²)</label>
-          <input id="surface" type="number" min="0">
-        </div>
+  <label>Nombre d’occupants</label>
+  <input
+   id="occupants"
+   type="number"
+  >
 
-        <div class="form-group">
-          <label>Nombre d’occupants</label>
-          <input id="occupants" type="number" min="0">
-        </div>
+  <label>Facture électrique </label>
+  <input
+   id="electricBill"
+   placeholder="Ex : 150 €"
+  >
 
-        <div class="form-group">
-          <label>Facture électrique mensuelle (€)</label>
-          <input id="electricBill" type="number" min="0">
-        </div>
+  <label>Âge / état de l’équipement actuel</label>
+  <input id="equipment">
 
-        <div class="form-group">
-          <label>Âge / état de l’équipement actuel</label>
-          <input id="equipment">
-        </div>
+  <label>Nombre de palettes ou stères </label>
+  <input
+   id="pellets"
+   placeholder="Ex : 4 palettes / 8 stères"
+  >
 
-        <div class="form-group">
-          <label>Palettes ou stères consommés / an</label>
-          <input id="pellets" placeholder="Ex : 5 palettes ou 8 stères">
-        </div>
+  <label>Projet envisagé</label>
+  <input id="project">
 
-        <div class="form-group">
-          <label>Projet envisagé</label>
-          <input id="project">
-        </div>
+  <label>Autres détails</label>
+  <textarea id="details"></textarea>
 
-        <div class="form-group full">
-          <label>Autres détails</label>
-          <textarea id="details"></textarea>
-        </div>
 
-      </div>
+  <button
+   class="btn btn-primary full"
+   type="submit"
+  >
+   💾 Enregistrer le prospect
+  </button>
 
-      <div class="actions">
-        <button type="submit" class="btn btn-primary">
-          Enregistrer le prospect
-        </button>
 
-        <button type="button" class="btn" onclick="showView('prospects')">
-          Annuler
-        </button>
-      </div>
+  <button
+   type="button"
+   id="cancelEdit"
+   class="btn btn-secondary full"
+   onclick="showPage('prospectsPage')"
+   style="display:none"
+  >
+   Annuler
+  </button>
 
-    </form>
+ </form>
 
-  </div>
-
-</div>
 </section>
 
-</main>
+
+<!-- AGENDA -->
+
+<section id="agendaPage" class="page">
+
+ <h2>Mon agenda</h2>
+
+ <div id="agendaList"></div>
+
+</section>
+
+
+<!-- PROSPECTION -->
+
+<section id="prospectionPage" class="page">
+
+ <h2>Prospection</h2>
+
+ <div class="map-status">
+
+  <div>
+   📍 Position :
+   <strong id="gpsStatus">Recherche...</strong>
+  </div>
+
+  <div style="margin-top:5px">
+   🔴 Rues prospectées :
+   <strong id="streetCount">0</strong>
+  </div>
+
+ </div>
+
+
+ <div class="map-actions">
+
+  <button
+   class="btn btn-primary"
+   onclick="locateMe()"
+  >
+   📍 Me localiser
+  </button>
+
+  <button
+   class="btn btn-red"
+   onclick="startStreetSelection()"
+  >
+   🔴 Sélectionner une rue
+  </button>
+
+ </div>
+
+
+ <div
+  id="selectionControls"
+  style="display:none"
+ >
+
+  <div class="map-status">
+
+   ✏️ Trace la rue avec ton doigt sur la carte.
+
+   <br><br>
+
+   Ensuite appuie sur
+   <strong>Valider la rue</strong>.
+
+  </div>
+
+  <div class="map-actions">
+
+   <button
+    class="btn btn-primary"
+    onclick="validateStreet()"
+   >
+    ✅ Valider la rue
+   </button>
+
+   <button
+    class="btn btn-secondary"
+    onclick="cancelStreetSelection()"
+   >
+    ↩️ Annuler
+   </button>
+
+  </div>
+
+ </div>
+
+
+ <button
+  class="btn btn-danger full"
+  onclick="deleteLastStreet()"
+ >
+  🗑️ Supprimer la dernière rue
+ </button>
+
+
+ <div
+  id="map"
+  style="margin-top:12px"
+ ></div>
+
+
+ <div class="prospecting-card">
+
+  <div
+   style="
+    font-weight:800;
+    margin-bottom:10px;
+   "
+  >
+   🪪 Ma carte professionnelle
+  </div>
+
+  <img
+   src="IMG_2501.jpeg"
+   alt="Carte Eco Green"
+  >
+
+ </div>
+
+</section>
+
+</div>
 
 
 <!-- NAVIGATION -->
+
 <nav class="bottom-nav">
 
-<button class="nav-btn active" data-view="home" onclick="showView('home')">
-  <div class="nav-icon">⌂</div>
+ <button
+  class="nav-btn active"
+  id="navHome"
+  onclick="showPage('homePage')"
+ >
+  <span>🏠</span>
   Accueil
-</button>
+ </button>
 
-<button class="nav-btn" data-view="prospects" onclick="showView('prospects')">
-  <div class="nav-icon">👥</div>
+ <button
+  class="nav-btn"
+  id="navProspects"
+  onclick="showPage('prospectsPage')"
+ >
+  <span>👥</span>
   Prospects
-</button>
+ </button>
 
-<button class="nav-btn" data-view="agenda" onclick="showView('agenda')">
-  <div class="nav-icon">📅</div>
+ <button
+  class="nav-btn"
+  id="navAgenda"
+  onclick="showPage('agendaPage')"
+ >
+  <span>📅</span>
   Agenda
-</button>
+ </button>
 
-<button class="nav-btn" data-view="prospection" onclick="showView('prospection')">
-  <div class="nav-icon">📍</div>
+ <button
+  class="nav-btn"
+  id="navMap"
+  onclick="showPage('prospectionPage')"
+ >
+  <span>🗺️</span>
   Prospection
-</button>
+ </button>
 
-<button class="nav-btn" data-view="new" onclick="newProspect()">
-  <div class="nav-icon">＋</div>
+ <button
+  class="nav-btn"
+  id="navNew"
+  onclick="prepareNew()"
+ >
+  <span>➕</span>
   Nouveau
-</button>
+ </button>
 
 </nav>
 
 
 <!-- MODAL RDV -->
-<div id="appointmentModal" class="modal">
 
-  <div class="modal-box">
+<div
+ id="appointmentModal"
+ class="modal"
+>
 
-    <button class="close" onclick="closeAppointmentModal()">✕</button>
+ <div class="modal-box">
 
-    <div class="modal-title">📅 Nouveau rendez-vous</div>
+  <div class="modal-title">
+   📅 Nouveau rendez-vous
+  </div>
 
-    <div class="success-box">
-      Le rendez-vous sera enregistré pour <strong>1 heure</strong>.
-    </div>
+  <div class="modal-subtitle">
+   Rendez-vous pris par Romaric
+  </div>
 
-    <div id="appointmentClient"></div>
+  <div
+   id="rdvSummary"
+   class="rdv-summary"
+  ></div>
 
-    <div class="form-group">
-      <label>Date du rendez-vous</label>
-      <input type="date" id="appointmentDate">
-    </div>
 
-    <div class="form-group">
-      <label>Heure</label>
-      <input type="time" id="appointmentTime">
-    </div>
+  <label>Date du rendez-vous</label>
 
-    <div class="card appointment-highlight">
-      <strong>Rendez-vous pris par Romaric</strong><br>
-      <span id="appointmentTakenDate"></span>
-    </div>
+  <input
+   id="rdvDate"
+   type="date"
+  >
 
-    <div class="actions">
 
-      <button class="btn btn-primary" onclick="saveAppointment()">
-        Enregistrer le rendez-vous
-      </button>
+  <label>Heure du rendez-vous</label>
 
-      <button class="btn" onclick="closeAppointmentModal()">
-        Annuler
-      </button>
+  <input
+   id="rdvTime"
+   type="time"
+   value="10:00"
+  >
 
-    </div>
+
+  <div
+   class="card"
+   style="
+    margin-top:15px;
+    background:#f5faf7;
+   "
+  >
+
+   ⏱️ Durée :
+
+   <strong>
+    1 heure
+   </strong>
 
   </div>
 
-</div>
+
+  <button
+   class="btn btn-primary full"
+   onclick="confirmAppointment()"
+  >
+   📅 Ajouter à Google Agenda
+  </button>
 
 
-<!-- MODAL DETAIL PROSPECT -->
-<div id="prospectModal" class="modal">
+  <button
+   class="btn btn-secondary full"
+   onclick="closeAppointmentModal()"
+  >
+   Annuler
+  </button>
 
-  <div class="modal-box">
-
-    <button class="close" onclick="closeProspectModal()">✕</button>
-
-    <div id="prospectDetails"></div>
-
-  </div>
+ </div>
 
 </div>
 
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+
 <script>
 
-let prospects = JSON.parse(localStorage.getItem("ecoProspects") || "[]");
-let appointments = JSON.parse(localStorage.getItem("ecoAppointments") || "[]");
-let streets = JSON.parse(localStorage.getItem("ecoStreets") || "[]");
+const STORAGE_PROSPECTS = "eco_green_prospects";
+const STORAGE_APPOINTMENTS = "eco_green_appointments";
+const STORAGE_STREETS = "eco_green_prospected_streets";
+
+let prospects =
+ JSON.parse(
+  localStorage.getItem(STORAGE_PROSPECTS) || "[]"
+ );
+
+let appointments =
+ JSON.parse(
+  localStorage.getItem(STORAGE_APPOINTMENTS) || "[]"
+ );
+
+let streets =
+ JSON.parse(
+  localStorage.getItem(STORAGE_STREETS) || "[]"
+ );
+
+let map = null;
+
+let streetLayer = null;
+
+let drawControl = null;
+
+let drawnItems = null;
+
+let temporaryStreet = null;
 
 let currentAppointmentProspect = null;
-let map = null;
-let userMarker = null;
-let drawnLayers = [];
-let drawingStreet = false;
-let currentStreetPoints = [];
+
+let currentDetailId = null;
+
+let gpsMarker = null;
+
+let gpsCircle = null;
+
+let gpsWatchId = null;
 
 
 /* =========================
-   UTILITAIRES
+   SAUVEGARDE
 ========================= */
 
-function saveData(){
-  localStorage.setItem("ecoProspects", JSON.stringify(prospects));
-  localStorage.setItem("ecoAppointments", JSON.stringify(appointments));
-  localStorage.setItem("ecoStreets", JSON.stringify(streets));
-  updateStats();
+function saveAll(){
+
+ localStorage.setItem(
+  STORAGE_PROSPECTS,
+  JSON.stringify(prospects)
+ );
+
+ localStorage.setItem(
+  STORAGE_APPOINTMENTS,
+  JSON.stringify(appointments)
+ );
+
+ localStorage.setItem(
+  STORAGE_STREETS,
+  JSON.stringify(streets)
+ );
+
+ updateStats();
 }
 
-function formatDate(dateString){
-  if(!dateString) return "";
 
-  const parts = dateString.split("-");
-  if(parts.length !== 3) return dateString;
+/* =========================
+   STATISTIQUES
+========================= */
 
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+function updateStats(){
+
+ document.getElementById(
+  "statProspects"
+ ).textContent = prospects.length;
+
+ document.getElementById(
+  "statRdv"
+ ).textContent = appointments.length;
+
+ document.getElementById(
+  "statStreets"
+ ).textContent = streets.length;
+
+ document.getElementById(
+  "streetCount"
+ ).textContent = streets.length;
+
+
+ const today = todayISO();
+
+ const todayAppointments =
+  appointments.filter(
+   a => a.date === today
+  ).length;
+
+ document.getElementById(
+  "statToday"
+ ).textContent =
+  todayAppointments;
 }
+
+
+/* =========================
+   DATES
+========================= */
 
 function todayISO(){
-  const d = new Date();
-  const month = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
 
-  return `${d.getFullYear()}-${month}-${day}`;
+ const d = new Date();
+
+ return (
+  d.getFullYear() +
+  "-" +
+  String(d.getMonth()+1).padStart(2,"0") +
+  "-" +
+  String(d.getDate()).padStart(2,"0")
+ );
 }
 
-function escapeHtml(value){
-  if(value === null || value === undefined) return "";
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+function formatDate(date){
+
+ if(!date) return "";
+
+ const d = new Date(date);
+
+ if(isNaN(d)) return date;
+
+ return d.toLocaleDateString(
+  "fr-FR"
+ );
 }
 
 
@@ -788,245 +1001,205 @@ function escapeHtml(value){
    NAVIGATION
 ========================= */
 
-function showView(view){
+function showPage(pageId){
 
-  document.querySelectorAll(".view").forEach(v=>{
-    v.classList.remove("active");
-  });
+ document.querySelectorAll(
+  ".page"
+ ).forEach(
+  p => p.classList.remove("active")
+ );
 
-  const target = document.getElementById("view-"+view);
+ document.getElementById(
+  pageId
+ ).classList.add("active");
 
-  if(target){
-    target.classList.add("active");
-  }
 
-  document.querySelectorAll(".nav-btn").forEach(btn=>{
-    btn.classList.remove("active");
-  });
+ document.querySelectorAll(
+  ".nav-btn"
+ ).forEach(
+  b => b.classList.remove("active")
+ );
 
-  const active = document.querySelector(
-    `.nav-btn[data-view="${view}"]`
+
+ if(pageId === "homePage")
+  document.getElementById("navHome")
+  .classList.add("active");
+
+ if(pageId === "prospectsPage"){
+  document.getElementById("navProspects")
+  .classList.add("active");
+  displayProspects();
+ }
+
+ if(pageId === "agendaPage"){
+  document.getElementById("navAgenda")
+  .classList.add("active");
+  displayAgenda();
+ }
+
+ if(pageId === "prospectionPage"){
+
+  document.getElementById("navMap")
+  .classList.add("active");
+
+  setTimeout(
+   initMap,
+   150
   );
 
-  if(active){
-    active.classList.add("active");
-  }
+ }
 
-  if(view === "home"){
-    updateStats();
-  }
+ if(pageId === "newPage")
+  document.getElementById("navNew")
+  .classList.add("active");
 
-  if(view === "prospects"){
-    renderProspects();
-  }
 
-  if(view === "agenda"){
-    renderAppointments();
-  }
+ window.scrollTo(0,0);
 
-  if(view === "prospection"){
-    setTimeout(initMap,100);
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+ updateStats();
 }
 
 
 /* =========================
-   STATS
+   NOUVEAU PROSPECT
 ========================= */
 
-function updateStats(){
+function prepareNew(){
 
-  document.getElementById("statProspects").textContent =
-    prospects.length;
+ document.getElementById(
+  "prospectForm"
+ ).reset();
 
-  document.getElementById("statAppointments").textContent =
-    appointments.length;
+ document.getElementById(
+  "editId"
+ ).value = "";
 
-  document.getElementById("statStreets").textContent =
-    streets.length;
+ document.getElementById(
+  "formTitle"
+ ).textContent =
+  "Nouveau prospect";
 
-  document.getElementById("streetCounter").textContent =
-    streets.length;
+ document.getElementById(
+  "cancelEdit"
+ ).style.display =
+  "none";
+
+ showPage("newPage");
 }
 
 
 /* =========================
-   PROSPECT FORM
+   AFFICHAGE PROSPECTS
 ========================= */
 
-function newProspect(){
+function displayProspects(){
 
-  document.getElementById("prospectForm").reset();
-  document.getElementById("editingId").value = "";
+ const list =
+  document.getElementById(
+   "prospectsList"
+  );
 
-  document.getElementById("newTitle").textContent =
-    "Nouveau prospect";
-
-  showView("new");
-}
-
-document.getElementById("prospectForm")
-.addEventListener("submit", function(e){
-
-  e.preventDefault();
-
-  const editingId =
-    document.getElementById("editingId").value;
-
-  const prospect = {
-
-    id: editingId || Date.now().toString(),
-
-    name: document.getElementById("name").value.trim(),
-
-    phone: document.getElementById("phone").value.trim(),
-
-    address: document.getElementById("address").value.trim(),
-
-    heating: document.getElementById("heating").value.trim(),
-
-    gasBill: document.getElementById("gasBill").value,
-
-    hotWater: document.getElementById("hotWater").value.trim(),
-
-    surface: document.getElementById("surface").value,
-
-    occupants: document.getElementById("occupants").value,
-
-    electricBill: document.getElementById("electricBill").value,
-
-    equipment: document.getElementById("equipment").value.trim(),
-
-    pellets: document.getElementById("pellets").value.trim(),
-
-    project: document.getElementById("project").value.trim(),
-
-    details: document.getElementById("details").value.trim(),
-
-    updatedAt: new Date().toISOString()
-
-  };
+ const search =
+  (
+   document.getElementById(
+    "searchInput"
+   )?.value || ""
+  ).toLowerCase();
 
 
-  if(editingId){
+ const filtered =
+  prospects.filter(
+   p =>
+    (p.name || "")
+    .toLowerCase()
+    .includes(search) ||
 
-    const index = prospects.findIndex(p=>p.id === editingId);
+    (p.phone || "")
+    .toLowerCase()
+    .includes(search) ||
 
-    if(index !== -1){
-      prospects[index] = prospect;
+    (p.address || "")
+    .toLowerCase()
+    .includes(search)
+  );
+
+
+ if(filtered.length === 0){
+
+  list.innerHTML = `
+   <div class="card empty">
+    Aucun prospect trouvé.
+   </div>
+  `;
+
+  return;
+ }
+
+
+ list.innerHTML =
+  filtered.map(
+   p => `
+
+   <div class="prospect">
+
+    <div class="prospect-name">
+     ${escapeHTML(p.name)}
+    </div>
+
+    <div class="prospect-info">
+     📞 ${escapeHTML(p.phone)}
+    </div>
+
+    <div class="prospect-info">
+     📍 ${escapeHTML(p.address)}
+    </div>
+
+    ${
+     p.project
+     ?
+     `<span class="badge">
+       ${escapeHTML(p.project)}
+      </span>`
+     :
+     ""
     }
 
-    saveData();
+    <div class="actions">
 
-    showView("prospects");
+     <button
+      class="btn btn-primary"
+      onclick="callClient('${p.id}')"
+     >
+      📞 Appeler
+     </button>
 
-    return;
-  }
+     <button
+      class="btn btn-secondary"
+      onclick="openMaps('${p.id}')"
+     >
+      📍 Itinéraire
+     </button>
 
+     <button
+      class="btn btn-secondary"
+      onclick="viewProspect('${p.id}')"
+     >
+      👁️ Voir
+     </button>
 
-  prospect.createdAt = new Date().toISOString();
-
-  prospects.unshift(prospect);
-
-  saveData();
-
-
-  /*
-     IMPORTANT :
-     Après création d'un prospect,
-     on ouvre DIRECTEMENT le formulaire RDV.
-  */
-
-  openAppointmentModal(prospect);
-
-});
-
-
-/* =========================
-   LISTE PROSPECTS
-========================= */
-
-function renderProspects(){
-
-  const container =
-    document.getElementById("prospectsList");
-
-  const search =
-    (document.getElementById("searchProspects")?.value || "")
-    .toLowerCase()
-    .trim();
-
-  const filtered = prospects.filter(p => {
-
-    return (
-      p.name?.toLowerCase().includes(search) ||
-      p.phone?.toLowerCase().includes(search) ||
-      p.address?.toLowerCase().includes(search)
-    );
-
-  });
-
-
-  if(filtered.length === 0){
-
-    container.innerHTML = `
-      <div class="card empty">
-        Aucun prospect trouvé.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML = filtered.map(p=>`
-
-    <div class="card">
-
-      <div class="card-title">
-        ${escapeHtml(p.name)}
-      </div>
-
-      <div class="card-sub">
-        📞 ${escapeHtml(p.phone || "")}
-      </div>
-
-      <div class="card-sub">
-        📍 ${escapeHtml(p.address || "")}
-      </div>
-
-      <div class="actions">
-
-        <button class="btn btn-primary btn-small"
-          onclick="viewProspect('${p.id}')">
-          Voir
-        </button>
-
-        <button class="btn btn-small"
-          onclick="openAppointmentModalById('${p.id}')">
-          📅 RDV
-        </button>
-
-        <button class="btn btn-small"
-          onclick="editProspect('${p.id}')">
-          Modifier
-        </button>
-
-        <button class="btn btn-danger btn-small"
-          onclick="deleteProspect('${p.id}')">
-          Supprimer
-        </button>
-
-      </div>
+     <button
+      class="btn btn-secondary"
+      onclick="editProspect('${p.id}')"
+     >
+      ✏️ Modifier
+     </button>
 
     </div>
 
-  `).join("");
+   </div>
+
+  `
+  ).join("");
 }
 
 
@@ -1036,151 +1209,263 @@ function renderProspects(){
 
 function viewProspect(id){
 
-  const p = prospects.find(x=>x.id === id);
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
 
-  if(!p) return;
+ if(!p) return;
 
-  document.getElementById("prospectDetails").innerHTML = `
+ currentDetailId = id;
 
-    <div class="modal-title">
-      ${escapeHtml(p.name)}
-    </div>
 
-    <div class="card">
+ document.getElementById(
+  "detailContent"
+ ).innerHTML = `
 
-      <div class="card-sub">Téléphone</div>
-      <strong>${escapeHtml(p.phone)}</strong>
+  <div class="card">
 
-      <br><br>
+   <h2>
+    ${escapeHTML(p.name)}
+   </h2>
 
-      <div class="card-sub">Adresse</div>
-      <strong>${escapeHtml(p.address)}</strong>
+   <div class="prospect-info">
+    📞 ${escapeHTML(p.phone)}
+   </div>
 
-      <br><br>
+   <div class="prospect-info">
+    📍 ${escapeHTML(p.address)}
+   </div>
 
-      <div class="card-sub">Chauffage</div>
-      <strong>${escapeHtml(p.heating || "-")}</strong>
+   <div class="separator"></div>
 
-      <br><br>
+   <h3>Informations</h3>
 
-      <div class="card-sub">Facture gaz</div>
-      <strong>${escapeHtml(p.gasBill || "-")} € / mois</strong>
+   <p>
+    <strong>Chauffage :</strong>
+    ${escapeHTML(p.heating || "-")}
+   </p>
 
-      <br><br>
+   <p>
+    <strong>Facture gaz :</strong>
+    ${escapeHTML(p.gasBill || "-")}
+   </p>
 
-      <div class="card-sub">Eau chaude</div>
-      <strong>${escapeHtml(p.hotWater || "-")}</strong>
+   <p>
+    <strong>Eau chaude :</strong>
+    ${escapeHTML(p.hotWater || "-")}
+   </p>
 
-      <br><br>
+   <p>
+    <strong>Surface :</strong>
+    ${escapeHTML(p.surface || "-")}
+   </p>
 
-      <div class="card-sub">Surface</div>
-      <strong>${escapeHtml(p.surface || "-")} m²</strong>
+   <p>
+    <strong>Occupants :</strong>
+    ${escapeHTML(String(p.occupants || "-"))}
+   </p>
 
-      <br><br>
+   <p>
+    <strong>Facture électrique :</strong>
+    ${escapeHTML(p.electricBill || "-")}
+   </p>
 
-      <div class="card-sub">Occupants</div>
-      <strong>${escapeHtml(p.occupants || "-")}</strong>
+   <p>
+    <strong>Équipement :</strong>
+    ${escapeHTML(p.equipment || "-")}
+   </p>
 
-      <br><br>
+   <p>
+    <strong>Palettes / stères :</strong>
+    ${escapeHTML(p.pellets || "-")}
+   </p>
 
-      <div class="card-sub">Électricité</div>
-      <strong>${escapeHtml(p.electricBill || "-")} € / mois</strong>
+   <p>
+    <strong>Projet :</strong>
+    ${escapeHTML(p.project || "-")}
+   </p>
 
-      <br><br>
+   <p>
+    <strong>Autres détails :</strong><br>
+    ${escapeHTML(p.details || "-")}
+   </p>
 
-      <div class="card-sub">Équipement actuel</div>
-      <strong>${escapeHtml(p.equipment || "-")}</strong>
+   <div class="separator"></div>
 
-      <br><br>
+   <div class="small">
+    Prospect créé le
+    ${formatDate(p.createdAt)}
+    par Romaric
+   </div>
 
-      <div class="card-sub">Palettes / stères par an</div>
-      <strong>${escapeHtml(p.pellets || "-")}</strong>
+  </div>
 
-      <br><br>
 
-      <div class="card-sub">Projet</div>
-      <strong>${escapeHtml(p.project || "-")}</strong>
+  <div class="card">
 
-      <br><br>
+   <h3>Actions</h3>
 
-      <div class="card-sub">Autres détails</div>
-      <strong>${escapeHtml(p.details || "-")}</strong>
+   <div class="actions">
 
-    </div>
+    <button
+     class="btn btn-primary"
+     onclick="callClient('${p.id}')"
+    >
+     📞 Appeler
+    </button>
 
-    <div class="actions">
+    <button
+     class="btn btn-secondary"
+     onclick="openMaps('${p.id}')"
+    >
+     📍 Itinéraire
+    </button>
 
-      <button class="btn btn-primary"
-        onclick="callProspect('${p.phone}')">
-        📞 Appeler
-      </button>
+    <button
+     class="btn btn-primary"
+     onclick="createAppointment('${p.id}')"
+    >
+     📅 Nouveau RDV
+    </button>
 
-      <button class="btn"
-        onclick="openDirections('${encodeURIComponent(p.address)}')">
-        🧭 Itinéraire
-      </button>
+    <button
+     class="btn btn-secondary"
+     onclick="editProspect('${p.id}')"
+    >
+     ✏️ Modifier
+    </button>
 
-      <button class="btn"
-        onclick="openAppointmentModalById('${p.id}')">
-        📅 Rendez-vous
-      </button>
+    <button
+     class="btn btn-danger"
+     onclick="deleteProspect('${p.id}')"
+    >
+     🗑️ Supprimer
+    </button>
 
-      <button class="btn"
-        onclick="editProspect('${p.id}');closeProspectModal()">
-        Modifier
-      </button>
+   </div>
 
-      <button class="btn btn-danger"
-        onclick="deleteProspect('${p.id}');closeProspectModal()">
-        Supprimer
-      </button>
+  </div>
+ `;
 
-    </div>
-
-  `;
-
-  document.getElementById("prospectModal")
-    .classList.add("show");
-}
-
-function closeProspectModal(){
-
-  document.getElementById("prospectModal")
-    .classList.remove("show");
-
+ showPage("detailPage");
 }
 
 
 /* =========================
-   EDITION
+   APPEL
+========================= */
+
+function callClient(id){
+
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
+
+ if(!p || !p.phone) return;
+
+ window.location.href =
+  "tel:" +
+  p.phone.replace(/\s/g,"");
+}
+
+
+/* =========================
+   GOOGLE MAPS
+========================= */
+
+function openMaps(id){
+
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
+
+ if(!p || !p.address) return;
+
+ const url =
+  "https://www.google.com/maps/dir/?api=1&destination=" +
+  encodeURIComponent(
+   p.address
+  );
+
+ window.open(
+  url,
+  "_blank"
+ );
+}
+
+
+/* =========================
+   MODIFIER
 ========================= */
 
 function editProspect(id){
 
-  const p = prospects.find(x=>x.id === id);
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
 
-  if(!p) return;
+ if(!p) return;
 
-  document.getElementById("editingId").value = p.id;
 
-  document.getElementById("name").value = p.name || "";
-  document.getElementById("phone").value = p.phone || "";
-  document.getElementById("address").value = p.address || "";
-  document.getElementById("heating").value = p.heating || "";
-  document.getElementById("gasBill").value = p.gasBill || "";
-  document.getElementById("hotWater").value = p.hotWater || "";
-  document.getElementById("surface").value = p.surface || "";
-  document.getElementById("occupants").value = p.occupants || "";
-  document.getElementById("electricBill").value = p.electricBill || "";
-  document.getElementById("equipment").value = p.equipment || "";
-  document.getElementById("pellets").value = p.pellets || "";
-  document.getElementById("project").value = p.project || "";
-  document.getElementById("details").value = p.details || "";
+ document.getElementById("editId").value =
+  p.id;
 
-  document.getElementById("newTitle").textContent =
-    "Modifier le prospect";
+ document.getElementById("name").value =
+  p.name || "";
 
-  showView("new");
+ document.getElementById("phone").value =
+  p.phone || "";
+
+ document.getElementById("address").value =
+  p.address || "";
+
+ document.getElementById("heating").value =
+  p.heating || "";
+
+ document.getElementById("gasBill").value =
+  p.gasBill || "";
+
+ document.getElementById("hotWater").value =
+  p.hotWater || "";
+
+ document.getElementById("surface").value =
+  p.surface || "";
+
+ document.getElementById("occupants").value =
+  p.occupants || "";
+
+ document.getElementById("electricBill").value =
+  p.electricBill || "";
+
+ document.getElementById("equipment").value =
+  p.equipment || "";
+
+ document.getElementById("pellets").value =
+  p.pellets || "";
+
+ document.getElementById("project").value =
+  p.project || "";
+
+ document.getElementById("details").value =
+  p.details || "";
+
+
+ document.getElementById(
+  "formTitle"
+ ).textContent =
+  "Modifier le prospect";
+
+ document.getElementById(
+  "cancelEdit"
+ ).style.display =
+  "block";
+
+
+ showPage("newPage");
 }
 
 
@@ -1190,278 +1475,469 @@ function editProspect(id){
 
 function deleteProspect(id){
 
-  const p = prospects.find(x=>x.id === id);
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
 
-  if(!p) return;
+ if(!p) return;
 
-  const confirmation =
-    confirm(`Supprimer le prospect "${p.name}" ?`);
 
-  if(!confirmation) return;
+ if(
+  !confirm(
+   "Supprimer définitivement " +
+   p.name +
+   " ?"
+  )
+ ) return;
 
-  prospects =
-    prospects.filter(x=>x.id !== id);
 
-  appointments =
-    appointments.filter(x=>x.prospectId !== id);
+ prospects =
+  prospects.filter(
+   x => x.id !== id
+  );
 
-  saveData();
+ appointments =
+  appointments.filter(
+   x => x.prospectId !== id
+  );
 
-  renderProspects();
-  renderAppointments();
+
+ saveAll();
+
+ showPage("prospectsPage");
 }
 
 
 /* =========================
-   TELEPHONE / ITINERAIRE
+   ENREGISTRER PROSPECT
 ========================= */
 
-function callProspect(phone){
+document
+.getElementById("prospectForm")
+.addEventListener(
+ "submit",
+ function(e){
 
-  if(!phone) return;
+  e.preventDefault();
 
-  window.location.href =
-    "tel:" + phone;
-}
 
-function openDirections(address){
+  const editId =
+   document.getElementById(
+    "editId"
+   ).value;
 
-  const url =
-    "https://www.google.com/maps/search/?api=1&query="
-    + address;
 
-  window.open(url,"_blank");
-}
+  const data = {
+
+   name:
+    document.getElementById("name")
+    .value.trim(),
+
+   phone:
+    document.getElementById("phone")
+    .value.trim(),
+
+   address:
+    document.getElementById("address")
+    .value.trim(),
+
+   heating:
+    document.getElementById("heating")
+    .value.trim(),
+
+   gasBill:
+    document.getElementById("gasBill")
+    .value.trim(),
+
+   hotWater:
+    document.getElementById("hotWater")
+    .value.trim(),
+
+   surface:
+    document.getElementById("surface")
+    .value.trim(),
+
+   occupants:
+    document.getElementById("occupants")
+    .value,
+
+   electricBill:
+    document.getElementById("electricBill")
+    .value.trim(),
+
+   equipment:
+    document.getElementById("equipment")
+    .value.trim(),
+
+   pellets:
+    document.getElementById("pellets")
+    .value.trim(),
+
+   project:
+    document.getElementById("project")
+    .value.trim(),
+
+   details:
+    document.getElementById("details")
+    .value.trim()
+  };
+
+
+  if(editId){
+
+   const index =
+    prospects.findIndex(
+     x => x.id === editId
+    );
+
+   if(index !== -1){
+
+    prospects[index] = {
+     ...prospects[index],
+     ...data,
+     updatedAt:
+      new Date().toISOString()
+    };
+
+   }
+
+
+   saveAll();
+
+   alert(
+    "Prospect modifié avec succès."
+   );
+
+   viewProspect(editId);
+
+   return;
+
+  }
+
+
+  const newId =
+   Date.now().toString();
+
+
+  const prospect = {
+
+   id:newId,
+
+   ...data,
+
+   createdAt:
+    new Date().toISOString(),
+
+   createdBy:
+    "Romaric"
+  };
+
+
+  prospects.push(
+   prospect
+  );
+
+  saveAll();
+
+
+  document.getElementById(
+   "prospectForm"
+  ).reset();
+
+
+  document.getElementById(
+   "editId"
+  ).value = "";
+
+
+  /* DIRECTEMENT VERS LE RDV */
+
+  createAppointment(
+   newId
+  );
+
+ }
+);
 
 
 /* =========================
-   RENDEZ-VOUS
+   RDV
 ========================= */
 
-function openAppointmentModalById(id){
+function createAppointment(id){
 
-  const p = prospects.find(x=>x.id === id);
+ const p =
+  prospects.find(
+   x => x.id === id
+  );
 
-  if(!p) return;
-
-  openAppointmentModal(p);
-}
+ if(!p) return;
 
 
-function openAppointmentModal(prospect){
+ currentAppointmentProspect =
+  id;
 
-  currentAppointmentProspect = prospect;
 
-  document.getElementById("appointmentClient").innerHTML = `
+ document.getElementById(
+  "rdvSummary"
+ ).innerHTML = `
 
-    <div class="card">
+  <strong>
+   RDV - ${escapeHTML(p.name)}
+  </strong>
 
-      <strong>${escapeHtml(prospect.name)}</strong><br>
+  <br><br>
 
-      📞 ${escapeHtml(prospect.phone)}<br>
+  📍 ${escapeHTML(p.address)}
 
-      📍 ${escapeHtml(prospect.address)}
+  <br>
 
-    </div>
+  📞 ${escapeHTML(p.phone)}
 
-  `;
+  <br><br>
 
-  document.getElementById("appointmentDate").value =
-    todayISO();
+  ⏱️ Durée :
+  <strong>1 heure</strong>
 
-  const now = new Date();
+ `;
 
-  let hour =
-    String(now.getHours()).padStart(2,"0");
 
-  let minutes =
-    now.getMinutes() >= 30 ? "30" : "00";
+ document.getElementById(
+  "rdvDate"
+ ).value =
+  todayISO();
 
-  document.getElementById("appointmentTime").value =
-    `${hour}:${minutes}`;
 
-  document.getElementById("appointmentTakenDate").textContent =
-    "Rendez-vous pris le " +
-    new Date().toLocaleDateString("fr-FR");
+ document.getElementById(
+  "rdvTime"
+ ).value =
+  "10:00";
 
-  document.getElementById("appointmentModal")
-    .classList.add("show");
+
+ document.getElementById(
+  "appointmentModal"
+ ).classList.add("active");
 }
 
 
 function closeAppointmentModal(){
 
-  document.getElementById("appointmentModal")
-    .classList.remove("show");
+ document.getElementById(
+  "appointmentModal"
+ ).classList.remove("active");
 
+ currentAppointmentProspect =
+  null;
+
+ showPage("prospectsPage");
 }
 
 
 /* =========================
-   ENREGISTRER RDV
+   CONFIRMATION RDV
 ========================= */
 
-function saveAppointment(){
+function confirmAppointment(){
 
-  if(!currentAppointmentProspect) return;
+ const p =
+  prospects.find(
+   x => x.id === currentAppointmentProspect
+  );
 
-  const date =
-    document.getElementById("appointmentDate").value;
-
-  const time =
-    document.getElementById("appointmentTime").value;
-
-  if(!date || !time){
-
-    alert("Merci de renseigner la date et l'heure.");
-
-    return;
-  }
+ if(!p) return;
 
 
-  const start =
-    new Date(`${date}T${time}:00`);
+ const date =
+  document.getElementById(
+   "rdvDate"
+  ).value;
 
-  /*
-    Durée fixe : 1 heure
-  */
-
-  const end =
-    new Date(start.getTime() + 60*60*1000);
+ const time =
+  document.getElementById(
+   "rdvTime"
+  ).value;
 
 
-  const appointment = {
+ if(!date || !time){
 
-    id:Date.now().toString(),
+  alert(
+   "Choisis une date et une heure."
+  );
 
-    prospectId:currentAppointmentProspect.id,
+  return;
+ }
 
-    prospectName:currentAppointmentProspect.name,
 
-    date,
+ const start =
+  new Date(
+   date +
+   "T" +
+   time
+  );
 
-    time,
 
-    duration:60,
+ const end =
+  new Date(
+   start.getTime() +
+   60 * 60 * 1000
+  );
 
-    takenBy:"Romaric",
 
-    takenDate:todayISO(),
+ const calendarDate =
+  d => {
 
-    address:currentAppointmentProspect.address,
+   return (
+    d.getFullYear() +
+    String(
+     d.getMonth()+1
+    ).padStart(2,"0") +
 
-    phone:currentAppointmentProspect.phone
+    String(
+     d.getDate()
+    ).padStart(2,"0") +
+
+    "T" +
+
+    String(
+     d.getHours()
+    ).padStart(2,"0") +
+
+    String(
+     d.getMinutes()
+    ).padStart(2,"0") +
+
+    "00"
+   );
 
   };
 
 
-  appointments.unshift(appointment);
-
-  saveData();
-
-  closeAppointmentModal();
-
-  openGoogleCalendar(appointment,currentAppointmentProspect);
-
-  showView("agenda");
-
-}
+ const takenDate =
+  new Date()
+  .toLocaleDateString(
+   "fr-FR"
+  );
 
 
-/* =========================
-   GOOGLE CALENDAR
-========================= */
+ const description =
 
-function calendarDate(date){
+  "RDV pris par Romaric\n" +
 
-  const y =
-    date.getFullYear();
+  "Date de prise du RDV : " +
+  takenDate +
 
-  const m =
-    String(date.getMonth()+1).padStart(2,"0");
+  "\n\n" +
 
-  const d =
-    String(date.getDate()).padStart(2,"0");
+  "Téléphone : " +
+  p.phone +
 
-  const h =
-    String(date.getHours()).padStart(2,"0");
+  "\nChauffage : " +
+  (p.heating || "-") +
 
-  const min =
-    String(date.getMinutes()).padStart(2,"0");
+  "\nFacture gaz : " +
+  (p.gasBill || "-") +
 
-  const sec =
-    String(date.getSeconds()).padStart(2,"0");
+  "\nEau chaude : " +
+  (p.hotWater || "-") +
 
-  return `${y}${m}${d}T${h}${min}${sec}`;
-}
+  "\nSurface : " +
+  (p.surface || "-") +
 
+  "\nOccupants : " +
+  (p.occupants || "-") +
 
-function openGoogleCalendar(appointment,p){
+  "\nFacture électrique : " +
+  (p.electricBill || "-") +
 
-  const start =
-    new Date(`${appointment.date}T${appointment.time}:00`);
+  "\nÉquipement : " +
+  (p.equipment || "-") +
 
-  const end =
-    new Date(start.getTime() + 60*60*1000);
+  "\nPalettes / stères : " +
+  (p.pellets || "-") +
 
+  "\nProjet : " +
+  (p.project || "-") +
 
-  const title =
-    `RDV - ${p.name}`;
-
-
-  const description = `
-
-Rendez-vous pris par Romaric.
-
-Date de prise de rendez-vous :
-${formatDate(appointment.takenDate)}
-
-Téléphone :
-${p.phone}
-
-Chauffage :
-${p.heating || "-"}
-
-Facture gaz :
-${p.gasBill || "-"} € / mois
-
-Production eau chaude :
-${p.hotWater || "-"}
-
-Surface :
-${p.surface || "-"} m²
-
-Nombre d'occupants :
-${p.occupants || "-"}
-
-Facture électrique :
-${p.electricBill || "-"} € / mois
-
-Équipement actuel :
-${p.equipment || "-"}
-
-Palettes / stères par an :
-${p.pellets || "-"}
-
-Projet :
-${p.project || "-"}
-
-Autres détails :
-${p.details || "-"}
-
-`.trim();
+  "\nAutres détails : " +
+  (p.details || "-");
 
 
-  const url =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    + "&text=" + encodeURIComponent(title)
-    + "&dates=" + calendarDate(start)
-    + "/" + calendarDate(end)
-    + "&details=" + encodeURIComponent(description)
-    + "&location=" + encodeURIComponent(p.address || "");
+ const appointment = {
+
+  id:
+   Date.now().toString(),
+
+  prospectId:
+   p.id,
+
+  name:
+   p.name,
+
+  date:
+   date,
+
+  time:
+   time,
+
+  duration:
+   60,
+
+  createdAt:
+   new Date().toISOString()
+ };
 
 
-  window.open(url,"_blank");
+ appointments.push(
+  appointment
+ );
+
+ saveAll();
+
+
+ const url =
+
+  "https://calendar.google.com/calendar/render" +
+
+  "?action=TEMPLATE" +
+
+  "&text=" +
+  encodeURIComponent(
+   "RDV - " + p.name
+  ) +
+
+  "&dates=" +
+  calendarDate(start) +
+  "/" +
+  calendarDate(end) +
+
+  "&location=" +
+  encodeURIComponent(
+   p.address
+  ) +
+
+  "&details=" +
+  encodeURIComponent(
+   description
+  );
+
+
+ document.getElementById(
+  "appointmentModal"
+ ).classList.remove("active");
+
+
+ currentAppointmentProspect =
+  null;
+
+
+ window.open(
+  url,
+  "_blank"
+ );
+
+
+ showPage("agendaPage");
 }
 
 
@@ -1469,503 +1945,710 @@ ${p.details || "-"}
    AGENDA
 ========================= */
 
-function renderAppointments(){
+function displayAgenda(){
 
-  const container =
-    document.getElementById("appointmentsList");
-
-  if(appointments.length === 0){
-
-    container.innerHTML = `
-      <div class="card empty">
-        Aucun rendez-vous.
-      </div>
-    `;
-
-    return;
-  }
+ const list =
+  document.getElementById(
+   "agendaList"
+  );
 
 
-  const sorted =
-    [...appointments].sort((a,b)=>{
+ if(
+  appointments.length === 0
+ ){
 
-      return (
-        `${a.date}T${a.time}`
-      ).localeCompare(
-        `${b.date}T${b.time}`
-      );
+  list.innerHTML = `
+   <div class="card empty">
+    Aucun rendez-vous.
+   </div>
+  `;
 
-    });
+  return;
+ }
 
 
-  container.innerHTML = sorted.map(a=>`
+ const sorted =
+  [...appointments].sort(
+   (a,b) =>
+    (
+     a.date +
+     a.time
+    ).localeCompare(
+     b.date +
+     b.time
+    )
+  );
 
-    <div class="card appointment-highlight">
 
-      <div class="card-title">
-        ${escapeHtml(a.prospectName)}
-      </div>
+ list.innerHTML =
+  sorted.map(
+   a => `
 
-      <div class="card-sub">
-        📅 ${formatDate(a.date)}
-        à ${escapeHtml(a.time)}
-      </div>
+   <div class="card">
 
-      <div class="card-sub">
-        ⏱️ 1 heure
-      </div>
+    <h3>
+     📅 RDV - ${escapeHTML(a.name)}
+    </h3>
 
-      <div class="card-sub">
-        📍 ${escapeHtml(a.address || "")}
-      </div>
-
-      <div class="actions">
-
-        <button class="btn btn-primary btn-small"
-          onclick="reopenCalendar('${a.id}')">
-          📅 Google Agenda
-        </button>
-
-        <button class="btn btn-small"
-          onclick="callProspect('${a.phone}')">
-          📞 Appeler
-        </button>
-
-        <button class="btn btn-small"
-          onclick="openDirections('${encodeURIComponent(a.address || "")}')">
-          🧭 Itinéraire
-        </button>
-
-        <button class="btn btn-danger btn-small"
-          onclick="deleteAppointment('${a.id}')">
-          Supprimer
-        </button>
-
-      </div>
-
+    <div class="prospect-info">
+     📆 ${formatISODate(a.date)}
     </div>
 
-  `).join("");
+    <div class="prospect-info">
+     🕐 ${escapeHTML(a.time)}
+    </div>
+
+    <div class="badge">
+     ⏱️ 1 heure
+    </div>
+
+   </div>
+
+  `
+  ).join("");
 }
 
 
-function deleteAppointment(id){
+function formatISODate(date){
 
-  if(!confirm("Supprimer ce rendez-vous ?")){
-    return;
-  }
+ if(!date) return "";
 
-  appointments =
-    appointments.filter(a=>a.id !== id);
+ const parts =
+  date.split("-");
 
-  saveData();
+ if(parts.length !== 3)
+  return date;
 
-  renderAppointments();
+ return (
+  parts[2] +
+  "/" +
+  parts[1] +
+  "/" +
+  parts[0]
+ );
 }
 
 
-function reopenCalendar(id){
-
-  const a =
-    appointments.find(x=>x.id === id);
-
-  if(!a) return;
-
-  const p =
-    prospects.find(x=>x.id === a.prospectId);
-
-  if(!p) return;
-
-  openGoogleCalendar(a,p);
-}
-
-
-/* =========================
-   CARTE / GPS
-========================= */
+/* ==================================================
+   CARTE DE PROSPECTION
+================================================== */
 
 function initMap(){
 
-  if(map){
+ if(map){
 
-    setTimeout(()=>{
-      map.invalidateSize();
-    },100);
+  map.invalidateSize();
 
-    return;
-  }
+  renderSavedStreets();
 
-
-  map =
-    L.map("map").setView(
-      [50.3,3.1],
-      10
-    );
+  return;
+ }
 
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom:19,
-      attribution:"© OpenStreetMap"
-    }
-  ).addTo(map);
-
-
-  loadSavedStreets();
-
-  addProspectMarkers();
-
-}
-
-
-function locateMe(){
-
-  if(!navigator.geolocation){
-
-    alert("La géolocalisation n'est pas disponible.");
-
-    return;
-  }
-
-
-  navigator.geolocation.getCurrentPosition(
-
-    position=>{
-
-      const lat =
-        position.coords.latitude;
-
-      const lng =
-        position.coords.longitude;
-
-
-      if(!map){
-
-        initMap();
-
-        setTimeout(()=>{
-          setUserPosition(lat,lng);
-        },300);
-
-      }else{
-
-        setUserPosition(lat,lng);
-
-      }
-
-    },
-
-    error=>{
-
-      alert(
-        "Impossible d'obtenir votre position. Vérifiez l'autorisation de localisation dans les réglages de l'iPhone."
-      );
-
-    },
-
-    {
-      enableHighAccuracy:true,
-      timeout:10000,
-      maximumAge:5000
-    }
-
-  );
-}
-
-
-function setUserPosition(lat,lng){
-
-  if(userMarker){
-
-    userMarker.setLatLng([lat,lng]);
-
-  }else{
-
-    userMarker =
-      L.marker([lat,lng])
-      .addTo(map)
-      .bindPopup("📍 Vous êtes ici");
-
-  }
-
-  map.setView(
-    [lat,lng],
-    17
+ map =
+  L.map(
+   "map",
+   {
+    zoomControl:true
+   }
+  )
+  .setView(
+   [50.367,3.171],
+   14
   );
 
-  userMarker.openPopup();
+
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+   maxZoom:19,
+   attribution:
+    "&copy; OpenStreetMap"
+  }
+ ).addTo(map);
+
+
+ drawnItems =
+  new L.FeatureGroup();
+
+ map.addLayer(
+  drawnItems
+ );
+
+
+ streetLayer =
+  new L.FeatureGroup();
+
+ map.addLayer(
+  streetLayer
+ );
+
+
+ renderSavedStreets();
+
+ addProspectMarkers();
+
+ startLiveGPS();
 }
 
 
 /* =========================
-   PROSPECTS SUR CARTE
+   RUES SAUVEGARDÉES
+========================= */
+
+function renderSavedStreets(){
+
+ if(!streetLayer) return;
+
+ streetLayer.clearLayers();
+
+
+ streets.forEach(
+  street => {
+
+   try{
+
+    const layer =
+     L.geoJSON(
+      street.geojson,
+      {
+       style:{
+        color:"#d60000",
+        weight:7,
+        opacity:.9
+       }
+      }
+     );
+
+    streetLayer.addLayer(
+     layer
+    );
+
+   }catch(e){}
+
+  }
+ );
+
+
+ updateStats();
+}
+
+
+/* =========================
+   SÉLECTION RUE
+========================= */
+
+function startStreetSelection(){
+
+ if(!map) return;
+
+
+ if(
+  temporaryStreet
+ ){
+
+  try{
+   map.removeLayer(
+    temporaryStreet
+   );
+  }catch(e){}
+
+  temporaryStreet =
+   null;
+ }
+
+
+ if(
+  drawControl
+ ){
+
+  map.removeControl(
+   drawControl
+  );
+
+ }
+
+
+ drawControl =
+  new L.Control.Draw({
+
+   position:
+    "topright",
+
+   draw:{
+
+    polyline:{
+     shapeOptions:{
+      color:"#ff0000",
+      weight:7,
+      opacity:.9
+     },
+
+     metric:true,
+
+     feet:false
+    },
+
+    polygon:false,
+    rectangle:false,
+    circle:false,
+    marker:false,
+    circlemarker:false
+   },
+
+   edit:false
+  });
+
+
+ map.addControl(
+  drawControl
+ );
+
+
+ document.getElementById(
+  "selectionControls"
+ ).style.display =
+  "block";
+
+
+ map.once(
+  L.Draw.Event.CREATED,
+  function(event){
+
+   temporaryStreet =
+    event.layer;
+
+   temporaryStreet.setStyle({
+    color:"#ff0000",
+    weight:8,
+    opacity:1
+   });
+
+
+   drawnItems.addLayer(
+    temporaryStreet
+   );
+
+
+   if(drawControl){
+
+    map.removeControl(
+     drawControl
+    );
+
+    drawControl =
+     null;
+   }
+
+  }
+ );
+
+
+ /* Lance immédiatement le tracé */
+
+ setTimeout(
+  function(){
+
+   const draw =
+    new L.Draw.Polyline(
+     map,
+     {
+      shapeOptions:{
+       color:"#ff0000",
+       weight:8,
+       opacity:1
+      },
+
+      metric:true
+     }
+    );
+
+   draw.enable();
+
+  },
+  100
+ );
+}
+
+
+/* =========================
+   VALIDER RUE
+========================= */
+
+function validateStreet(){
+
+ if(
+  !temporaryStreet
+ ){
+
+  alert(
+   "Trace d'abord une rue avec ton doigt."
+  );
+
+  return;
+ }
+
+
+ const geojson =
+  temporaryStreet.toGeoJSON();
+
+
+ streets.push({
+
+  id:
+   Date.now().toString(),
+
+  geojson:
+   geojson,
+
+  createdAt:
+   new Date().toISOString()
+
+ });
+
+
+ saveAll();
+
+
+ try{
+
+  drawnItems.removeLayer(
+   temporaryStreet
+  );
+
+ }catch(e){}
+
+
+ streetLayer.addLayer(
+  L.geoJSON(
+   geojson,
+   {
+    style:{
+     color:"#d60000",
+     weight:7,
+     opacity:.9
+    }
+   }
+  )
+ );
+
+
+ temporaryStreet =
+  null;
+
+
+ document.getElementById(
+  "selectionControls"
+ ).style.display =
+  "none";
+
+
+ alert(
+  "✅ Rue enregistrée comme prospectée."
+ );
+}
+
+
+/* =========================
+   ANNULER
+========================= */
+
+function cancelStreetSelection(){
+
+ if(temporaryStreet){
+
+  try{
+
+   drawnItems.removeLayer(
+    temporaryStreet
+   );
+
+  }catch(e){}
+
+  temporaryStreet =
+   null;
+ }
+
+
+ if(drawControl){
+
+  map.removeControl(
+   drawControl
+  );
+
+  drawControl =
+   null;
+ }
+
+
+ document.getElementById(
+  "selectionControls"
+ ).style.display =
+  "none";
+}
+
+
+/* =========================
+   SUPPRIMER DERNIÈRE RUE
+========================= */
+
+function deleteLastStreet(){
+
+ if(
+  streets.length === 0
+ ){
+
+  alert(
+   "Aucune rue enregistrée."
+  );
+
+  return;
+ }
+
+
+ if(
+  !confirm(
+   "Supprimer la dernière rue prospectée ?"
+  )
+ ) return;
+
+
+ streets.pop();
+
+ saveAll();
+
+ renderSavedStreets();
+}
+
+
+/* =========================
+   GPS EN DIRECT
+========================= */
+
+function startLiveGPS(){
+
+ if(
+  !navigator.geolocation
+ ){
+
+  document.getElementById(
+   "gpsStatus"
+  ).textContent =
+   "Non disponible";
+
+  return;
+ }
+
+
+ if(gpsWatchId !== null)
+  return;
+
+
+ gpsWatchId =
+  navigator.geolocation.watchPosition(
+
+   function(position){
+
+    const lat =
+     position.coords.latitude;
+
+    const lng =
+     position.coords.longitude;
+
+    const accuracy =
+     position.coords.accuracy;
+
+
+    document.getElementById(
+     "gpsStatus"
+    ).textContent =
+     "Actif";
+
+
+    if(!gpsMarker){
+
+     gpsMarker =
+      L.marker(
+       [lat,lng]
+      )
+      .addTo(map)
+      .bindPopup(
+       "📍 Vous êtes ici"
+      );
+
+     gpsCircle =
+      L.circle(
+       [lat,lng],
+       {
+        radius:accuracy,
+        color:"#087a50",
+        fillOpacity:.08
+       }
+      )
+      .addTo(map);
+
+
+     map.setView(
+      [lat,lng],
+      17
+     );
+
+    }else{
+
+     gpsMarker.setLatLng(
+      [lat,lng]
+     );
+
+     gpsCircle.setLatLng(
+      [lat,lng]
+     );
+
+     gpsCircle.setRadius(
+      accuracy
+     );
+
+    }
+
+   },
+
+   function(error){
+
+    document.getElementById(
+     "gpsStatus"
+    ).textContent =
+     "Autorisation nécessaire";
+
+   },
+
+   {
+    enableHighAccuracy:true,
+    maximumAge:3000,
+    timeout:10000
+   }
+
+  );
+}
+
+
+/* =========================
+   ME LOCALISER
+========================= */
+
+function locateMe(){
+
+ if(!navigator.geolocation){
+
+  alert(
+   "La géolocalisation n'est pas disponible."
+  );
+
+  return;
+ }
+
+
+ navigator.geolocation.getCurrentPosition(
+
+  function(position){
+
+   const lat =
+    position.coords.latitude;
+
+   const lng =
+    position.coords.longitude;
+
+
+   if(map){
+
+    map.setView(
+     [lat,lng],
+     18
+    );
+
+   }
+
+  },
+
+  function(){
+
+   alert(
+    "Autorise la localisation dans les réglages de ton iPhone pour utiliser cette fonction."
+   );
+
+  },
+
+  {
+   enableHighAccuracy:true,
+   timeout:10000
+  }
+ );
+}
+
+
+/* =========================
+   PROSPECTS SUR LA CARTE
 ========================= */
 
 function addProspectMarkers(){
 
-  prospects.forEach(p=>{
+ if(!map) return;
 
-    if(!p.lat || !p.lng) return;
 
-    const marker =
-      L.marker([p.lat,p.lng])
-      .addTo(map);
+ prospects.forEach(
+  p => {
 
-    marker.bindPopup(`
-      <strong>${escapeHtml(p.name)}</strong><br>
-      ${escapeHtml(p.address || "")}<br><br>
+   if(
+    !p.lat ||
+    !p.lng
+   ) return;
 
-      <button
-        onclick="openDirections('${encodeURIComponent(p.address || "")}')">
-        🧭 Itinéraire
-      </button>
-    `);
 
-  });
+   L.marker(
+    [
+     p.lat,
+     p.lng
+    ]
+   )
+   .addTo(map)
+   .bindPopup(
+    `
+     <strong>
+      ${escapeHTML(p.name)}
+     </strong>
+     <br>
+     📞 ${escapeHTML(p.phone)}
+     <br>
+     📍 ${escapeHTML(p.address)}
+    `
+   );
 
+  }
+ );
 }
 
 
 /* =========================
-   RUES PROSPECTÉES
+   SECURITE HTML
 ========================= */
 
-function startStreetMode(){
+function escapeHTML(value){
 
-  if(!map){
+ return String(
+  value ?? ""
+ )
+ .replace(
+  /[&<>"']/g,
+  function(m){
 
-    initMap();
+   return {
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+   }[m];
 
-    setTimeout(startStreetMode,300);
-
-    return;
   }
-
-
-  if(drawingStreet){
-
-    return;
-  }
-
-
-  drawingStreet = true;
-
-  currentStreetPoints = [];
-
-  alert(
-    "Trace maintenant la rue avec ton doigt sur la carte. Relâche ton doigt lorsque tu as terminé."
-  );
-
-
-  map.dragging.disable();
-
-
-  const onMouseDown = e => {
-
-    currentStreetPoints = [
-      [e.latlng.lat,e.latlng.lng]
-    ];
-
-  };
-
-
-  const onMouseMove = e => {
-
-    if(currentStreetPoints.length === 0){
-      return;
-    }
-
-    const last =
-      currentStreetPoints[
-        currentStreetPoints.length-1
-      ];
-
-    const distance =
-      map.distance(
-        last,
-        [e.latlng.lat,e.latlng.lng]
-      );
-
-
-    if(distance > 3){
-
-      currentStreetPoints.push([
-        e.latlng.lat,
-        e.latlng.lng
-      ]);
-
-    }
-
-  };
-
-
-  const onMouseUp = () => {
-
-    finishStreet();
-
-    map.off("mousedown",onMouseDown);
-    map.off("mousemove",onMouseMove);
-    map.off("mouseup",onMouseUp);
-
-  };
-
-
-  map.on("mousedown",onMouseDown);
-  map.on("mousemove",onMouseMove);
-  map.on("mouseup",onMouseUp);
-
-
-  const onTouchStart = e => {
-
-    const touch =
-      e.originalEvent.touches[0];
-
-    const point =
-      map.mouseEventToLatLng(touch);
-
-    currentStreetPoints = [
-      [point.lat,point.lng]
-    ];
-
-  };
-
-
-  const onTouchMove = e => {
-
-    e.originalEvent.preventDefault();
-
-    const touch =
-      e.originalEvent.touches[0];
-
-    const point =
-      map.mouseEventToLatLng(touch);
-
-    const last =
-      currentStreetPoints[
-        currentStreetPoints.length-1
-      ];
-
-
-    if(
-      !last ||
-      map.distance(last,[point.lat,point.lng]) > 3
-    ){
-
-      currentStreetPoints.push([
-        point.lat,
-        point.lng
-      ]);
-
-    }
-
-  };
-
-
-  const onTouchEnd = () => {
-
-    finishStreet();
-
-    map.off("touchstart",onTouchStart);
-    map.off("touchmove",onTouchMove);
-    map.off("touchend",onTouchEnd);
-
-  };
-
-
-  map.on("touchstart",onTouchStart);
-  map.on("touchmove",onTouchMove);
-  map.on("touchend",onTouchEnd);
-
-}
-
-
-function finishStreet(){
-
-  if(!drawingStreet){
-    return;
-  }
-
-
-  drawingStreet = false;
-
-  map.dragging.enable();
-
-
-  if(currentStreetPoints.length < 2){
-
-    currentStreetPoints = [];
-
-    return;
-  }
-
-
-  const street = {
-
-    id:Date.now().toString(),
-
-    points:currentStreetPoints
-
-  };
-
-
-  streets.push(street);
-
-  saveData();
-
-  drawStreet(street);
-
-  currentStreetPoints = [];
-
-}
-
-
-function drawStreet(street){
-
-  const line =
-    L.polyline(
-      street.points,
-      {
-        color:"red",
-        weight:7,
-        opacity:.85
-      }
-    ).addTo(map);
-
-  drawnLayers.push(line);
-
-}
-
-
-function loadSavedStreets(){
-
-  drawnLayers.forEach(layer=>{
-    map.removeLayer(layer);
-  });
-
-  drawnLayers = [];
-
-  streets.forEach(drawStreet);
-
-}
-
-
-function undoStreet(){
-
-  if(streets.length === 0){
-
-    alert("Aucune rue à supprimer.");
-
-    return;
-  }
-
-
-  streets.pop();
-
-  saveData();
-
-  loadSavedStreets();
-
+ );
 }
 
 
@@ -1974,8 +2657,8 @@ function undoStreet(){
 ========================= */
 
 updateStats();
-renderProspects();
-renderAppointments();
+
+displayProspects();
 
 </script>
 
