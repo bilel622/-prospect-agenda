@@ -869,6 +869,23 @@ textarea {
         </button>
     </div>
 
+    <div class="card" style="margin:14px 0;padding:15px;">
+        <h3 style="margin-top:0;">🏙️ Mes secteurs</h3>
+        <p class="muted" style="margin:0 0 10px;">Ajoute le nom de chaque ville prospectée. Le rapport WhatsApp affichera uniquement les villes, jamais les rues.</p>
+        <form onsubmit="addSector(event)" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="sectorName" type="text" placeholder="Nom de la ville" autocomplete="address-level2" required style="flex:1;min-width:160px;">
+            <button class="btn btn-primary" type="submit">➕ Ajouter un secteur</button>
+        </form>
+        <div id="sectorsList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card" style="margin:14px 0;padding:15px;">
+        <h3 style="margin-top:0;">📲 Rapport WhatsApp du jour</h3>
+        <p class="muted">Récapitulatif de tous les secteurs, avec les rendez-vous et les compteurs du jour.</p>
+        <button class="btn btn-primary" type="button" onclick="copyDailyWhatsAppReport()" style="width:100%;">📋 Copier le rapport WhatsApp</button>
+        <pre id="dailyReportPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin:12px 0 0;"></pre>
+    </div>
+
     <div id="map"></div>
 </section>
 
@@ -1134,6 +1151,7 @@ const STORAGE_APPOINTMENTS = "eco_green_appointments";
 const STORAGE_STREETS = "eco_green_prospected_streets";
 const STORAGE_ABSENTS = "eco_green_absents";
 const STORAGE_COUNTERS = "eco_green_prospecting_counters";
+const STORAGE_SECTORS = "eco_green_prospecting_sectors";
 
 let prospects = JSON.parse(
     localStorage.getItem(STORAGE_PROSPECTS) || "[]"
@@ -1155,6 +1173,11 @@ let counters = JSON.parse(
     localStorage.getItem(STORAGE_COUNTERS) || "{}"
 );
 
+// Secteurs de prospection : un secteur correspond au nom d’une ville.
+let sectors = JSON.parse(
+    localStorage.getItem(STORAGE_SECTORS) || "[]"
+);
+
 let currentProspectId = null;
 let currentCounterType = null;
 let map = null;
@@ -1174,6 +1197,7 @@ function saveAll() {
     localStorage.setItem(STORAGE_STREETS, JSON.stringify(streets));
     localStorage.setItem(STORAGE_ABSENTS, JSON.stringify(absents));
     localStorage.setItem(STORAGE_COUNTERS, JSON.stringify(counters));
+    localStorage.setItem(STORAGE_SECTORS, JSON.stringify(sectors));
 }
 
 function generateId() {
@@ -1252,6 +1276,7 @@ function changeCounter(type, amount) {
     saveAll();
 
     updateAllDisplays();
+    renderDailyReport();
 
     renderCounterPage();
 }
@@ -1266,6 +1291,7 @@ function resetCurrentCounter() {
     saveAll();
 
     updateAllDisplays();
+    renderDailyReport();
     renderCounterPage();
 }
 
@@ -1427,6 +1453,9 @@ function updateAllDisplays() {
 
     document.getElementById("fieldDeballe").textContent =
         counters.deballe || 0;
+
+    renderSectors();
+    renderDailyReport();
 }
 
 
@@ -2227,6 +2256,129 @@ function createGoogleCalendarEvent(a) {
 
 
 /* =========================================================
+   SECTEURS ET RAPPORT WHATSAPP
+========================================================= */
+
+function addSector(event) {
+    event.preventDefault();
+    const input = document.getElementById("sectorName");
+    const name = (input.value || "").trim().replace(/\s+/g, " ");
+    if (!name) return;
+
+    const today = todayKey();
+    const exists = sectors.some(s =>
+        String(s.name || "").toLocaleLowerCase("fr") === name.toLocaleLowerCase("fr") &&
+        (s.date || today) === today
+    );
+    if (exists) {
+        alert("Cette ville est déjà dans tes secteurs.");
+        return;
+    }
+
+    sectors.push({ id: generateId(), name, date: today, createdAt: Date.now() });
+    saveAll();
+    input.value = "";
+    renderSectors();
+    renderDailyReport();
+}
+
+function removeSector(id) {
+    if (!confirm("Retirer ce secteur de la liste ?")) return;
+    sectors = sectors.filter(s => s.id !== id);
+    saveAll();
+    renderSectors();
+    renderDailyReport();
+}
+
+function renderSectors() {
+    const container = document.getElementById("sectorsList");
+    if (!container) return;
+    if (!sectors.length) {
+        container.innerHTML = '<div class="muted">Aucun secteur ajouté pour le moment.</div>';
+        return;
+    }
+    container.innerHTML = sectors.map(s => `
+        <div class="button-row" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #e5e7eb;">
+            <strong>📍 ${escapeHtml(s.name)}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeSector('${s.id}')" aria-label="Retirer ${escapeHtml(s.name)}">✕</button>
+        </div>
+    `).join("");
+}
+
+function isAppointmentFromToday(a) {
+    const today = todayKey();
+    if (a.createdAt) {
+        const created = new Date(a.createdAt);
+        return `${created.getFullYear()}-${String(created.getMonth()+1).padStart(2,"0")}-${String(created.getDate()).padStart(2,"0")}` === today;
+    }
+    return a.date === today;
+}
+
+function buildDailyWhatsAppReport() {
+    initDailyCounters();
+    const todayAppointments = appointments
+        .filter(isAppointmentFromToday)
+        .sort((a,b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
+    const today = todayKey();
+    const cityNames = [...new Set(sectors
+        .filter(s => (s.date || today) === today)
+        .map(s => String(s.name || "").trim())
+        .filter(Boolean))];
+    const lines = [
+        "🌿 *ECO GREEN PROSPECT — RAPPORT DU JOUR*",
+        `📅 ${new Date().toLocaleDateString("fr-FR")}`,
+        "",
+        `🏙️ *Secteurs prospectés :* ${cityNames.length ? cityNames.join(", ") : "Aucun secteur renseigné"}`,
+        "",
+        "📊 *RÉSULTATS*",
+        `📅 Rendez-vous : ${todayAppointments.length}`,
+        `🎯 Hors cible : ${counters.hors_cible || 0}`,
+        `❌ Refus : ${counters.refus || 0}`,
+        `📦 Déballes : ${counters.deballe || 0}`
+    ];
+
+    if (todayAppointments.length) {
+        lines.push("", "🤝 *RENDEZ-VOUS PRIS*");
+        todayAppointments.forEach(a => {
+            const date = a.date ? a.date.split("-").reverse().join("/") : "Date non renseignée";
+            lines.push(`• ${a.name || "Client"} — ${date}${a.time ? ` à ${a.time}` : ""}`);
+        });
+    } else {
+        lines.push("", "🤝 Aucun rendez-vous pris aujourd'hui.");
+    }
+
+    lines.push("", "💚 Bonne prospection à tous !");
+    return lines.join("\n");
+}
+
+function renderDailyReport() {
+    const preview = document.getElementById("dailyReportPreview");
+    if (preview) preview.textContent = buildDailyWhatsAppReport();
+}
+
+async function copyDailyWhatsAppReport() {
+    const report = buildDailyWhatsAppReport();
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(report);
+        } else {
+            const area = document.createElement("textarea");
+            area.value = report;
+            area.style.position = "fixed";
+            area.style.opacity = "0";
+            document.body.appendChild(area);
+            area.select();
+            const copied = document.execCommand("copy");
+            area.remove();
+            if (!copied) throw new Error("Copie impossible");
+        }
+        alert("✅ Rapport copié ! Tu peux le coller dans WhatsApp.");
+    } catch (error) {
+        alert("Impossible de copier automatiquement. Sélectionne le rapport affiché puis copie-le.");
+    }
+}
+
+/* =========================================================
    CARTE
 ========================================================= */
 
@@ -2428,6 +2580,8 @@ function initialiseApp() {
     renderAbsents();
 
     updateAllDisplays();
+    renderSectors();
+    renderDailyReport();
 
     /*
        Vérification supplémentaire :
